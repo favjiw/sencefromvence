@@ -9,6 +9,7 @@ import 'package:sence_sence/history/history_screen.dart';
 import 'package:sence_sence/permission/permission_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/botnavbar.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String dateEnd = yearNow + " 07:00:00";
   late DateTime timeStart = DateTime.parse(dateStart);
   late DateTime timeEnd = DateTime.parse(dateEnd);
+  late int nis;
 
   bool isCanPresentIn() {
     if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
@@ -39,8 +41,18 @@ class _HomeScreenState extends State<HomeScreen> {
     return canPresent;
   }
 
+  Future<int> asyncNIS() async {
+    return await SessionManager().get("user");
+  }
   @override
   Widget build(BuildContext context) {
+
+    asyncNIS().then((value) {
+      setState(() {
+        this.nis = value;
+      });
+    });
+
     return Scaffold(
       backgroundColor: neutral,
       body: SingleChildScrollView(
@@ -66,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: HomeTitle,
                         ),
                         Text(
-                          'Fairuztsani Kemal Setiawan',
-                          style: HomeTitle,
+                          "$nis"
+                          ,style: HomeTitle,
                         ),
                       ],
                     ),
@@ -202,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     animType: AnimType.bottomSlide,
                                     title: 'Warning',
                                     titleTextStyle: popUpWarningTitle,
-                                    desc: 'Kamu tidak bisa melakukan presensi karena melebihi batas waktu',
+                                    desc: 'Kamu belum bisa presensi sekarang',
                                     descTextStyle: popUpWarningDesc,
                                     buttonsTextStyle: whiteOnBtnSmall,
                                     buttonsBorderRadius: BorderRadius.circular(6.r),
@@ -231,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: EdgeInsets.only(left: 7.w),
                 child: Text(
-                  "Jl. Kliningan No.6, Turangga, Kecamatan Lengkong, \nKota Bandung, Jawa Barat",
+                  "Jl. Kliningan No.6, Turangga, Kecamatan Lengkong, Kota Bandung, Jawa Barat",
                   style: addressHome,
                 ),
               ),

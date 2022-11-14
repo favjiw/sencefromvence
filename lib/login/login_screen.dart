@@ -5,6 +5,7 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 import 'package:sence_sence/widget/botnavbar.dart';
 
@@ -47,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     end: Alignment.topCenter,
                     colors: [btnMain, HexColor('#428CFF')],
                   ),
-                  image: DecorationImage(
+                  image: const DecorationImage(
                     alignment: Alignment.bottomCenter,
                     fit: BoxFit.contain,
                     image: AssetImage('asset/images/login-bg-img.png'),
@@ -166,32 +167,27 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5.r),
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            print("Session exist : ${await SessionManager().containsKey("id") == true ? "true": "false"}");
                             String nis = _nis.text;
-                            String password = _hash(_password.text);
-                            if (nis == "2021118620" &&
-                                password ==
-                                    "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f") {
-                              print("LOGGED IN");
+                            String password = _password.text;
+                            if (nis == "2021118576" && password =="12345678") {
+                              await SessionManager().set("user", nis);
+                              print(await SessionManager().get("user"));
                               Navigator.pushNamedAndRemoveUntil( context, '/nav-bar', (route) => false);
-                              // Navigator.pushReplacement(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => BotNavBar(
-                              //         nis: nis,
-                              //         password: password,
-                              //       ),
-                              //     ));
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const BotNavBar(),
+                                  ));
                             }
-                            print(nis);
-                            print(password);
                           },
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all(btnMain),
+                          ),
                           child: Text(
                             "Login",
                             style: whiteOnBtn,
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(btnMain),
                           ),
                         ),
                       ),
