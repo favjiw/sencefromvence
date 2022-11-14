@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onPressed: () {
                                   AwesomeDialog(
                                     context: context,
-                                    dialogType: DialogType.warning,
+                                    dialogType: DialogType.error,
                                     headerAnimationLoop: false,
                                     animType: AnimType.bottomSlide,
                                     title: 'Warning',

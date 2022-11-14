@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -103,7 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 31.h,),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                buildWarningDialog(context).show();
+              },
               child: Column(
                 children: [
                   Padding(
@@ -134,7 +137,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 17.h,),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                buildWarningDialog(context).show();
+              },
               child: Column(
                 children: [
                   Padding(
@@ -181,7 +186,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 31.h,),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                buildWarningDialog(context).show();
+              },
               child: Column(
                 children: [
                   Padding(
@@ -212,7 +219,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 18.h),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                buildWarningDialog(context).show();
+              },
               child: Column(
                 children: [
                   Padding(
@@ -276,5 +285,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  }
+
+  AwesomeDialog buildWarningDialog(BuildContext context) {
+    return AwesomeDialog(
+                context: context,
+                dialogType: DialogType.warning,
+                headerAnimationLoop: false,
+                animType: AnimType.bottomSlide,
+                title: 'Maaf :(',
+                titleTextStyle: popUpWarningTitle,
+                desc: 'Fitur ini masih dalam tahap pengembangan',
+                descTextStyle: popUpWarningDesc,
+                buttonsTextStyle: whiteOnBtnSmall,
+                buttonsBorderRadius: BorderRadius.circular(6.r),
+                btnOkColor: btnMain,
+                showCloseIcon: false,
+                btnOkText: 'Kembali',
+                btnOkOnPress: () {},
+              );
   }
 }
