@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sence_sence/history/history_screen.dart';
@@ -37,11 +38,27 @@ class _BotNavBarState extends State<BotNavBar> {
           height: 35.h,
         ),
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HistoryScreen(),
-              ));
+          // Navigator.push(
+          //     context,
+          //     MaterialPageRoute(
+          //       builder: (context) => HistoryScreen(),
+          //     ));
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.infoReverse,
+            headerAnimationLoop: false,
+            animType: AnimType.bottomSlide,
+            title: 'Face Scan',
+            titleTextStyle: popUpWarningTitle,
+            desc: 'To Face Presence',
+            descTextStyle: popUpWarningDesc,
+            buttonsTextStyle: whiteOnBtnSmall,
+            buttonsBorderRadius: BorderRadius.circular(6.r),
+            btnOkColor: btnMain,
+            showCloseIcon: false,
+            btnOkText: 'Kembali',
+            btnOkOnPress: () {},
+          ).show();
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
