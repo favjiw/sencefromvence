@@ -73,52 +73,58 @@ class _BotNavBarState extends State<BotNavBar> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.only(left: 42.w),
-                child: MaterialButton(
-                  onPressed: (){
-                    setState(() {
-                      currentScreen = HomeScreen();
-                      currentIndex = 0;
-                    });
-                  },
-                  minWidth: 42.w,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        currentIndex == 0
-                            ? 'asset/images/home-ic-active.png'
-                            : 'asset/images/home-ic-inactive.png',
-                        width: 24.w,
-                        height: 24.h,
-                      ),
-                      Text("Home", style: currentIndex == 0 ? botNavActive : botNavInactive,),
-                    ],
+                padding: EdgeInsets.only(left: 20.w),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100.r),
+                  child: MaterialButton(
+                    onPressed: (){
+                      setState(() {
+                        currentScreen = HomeScreen();
+                        currentIndex = 0;
+                      });
+                    },
+                    minWidth: 100.w,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          currentIndex == 0
+                              ? 'asset/images/home-ic-active.png'
+                              : 'asset/images/home-ic-inactive.png',
+                          width: 24.w,
+                          height: 24.h,
+                        ),
+                        Text("Home", style: currentIndex == 0 ? botNavActive : botNavInactive,),
+                      ],
+                    ),
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: 42.h),
-                child: MaterialButton(
-                  onPressed: (){
-                    setState(() {
-                      currentScreen = ProfileScreen();
-                      currentIndex = 1;
-                    });
-                  },
-                  minWidth: 42.w,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        currentIndex == 1
-                            ? 'asset/images/profile-ic-active.png'
-                            : 'asset/images/profile-ic-inactive.png',
-                        width: 24.w,
-                        height: 24.h,
-                      ),
-                      Text("Profile", style: currentIndex == 1 ? botNavActive : botNavInactive,),
-                    ],
+                padding: EdgeInsets.only(right: 20.h),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(100.r),
+                  child: MaterialButton(
+                    onPressed: (){
+                      setState(() {
+                        currentScreen = ProfileScreen();
+                        currentIndex = 1;
+                      });
+                    },
+                    minWidth: 100.w,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          currentIndex == 1
+                              ? 'asset/images/profile-ic-active.png'
+                              : 'asset/images/profile-ic-inactive.png',
+                          width: 24.w,
+                          height: 24.h,
+                        ),
+                        Text("Profile", style: currentIndex == 1 ? botNavActive : botNavInactive,),
+                      ],
+                    ),
                   ),
                 ),
               ),
