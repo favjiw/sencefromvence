@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sence_sence/history/history_screen.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/login/login_screen.dart';
+import 'package:sence_sence/maps/maps_screen.dart';
 import 'package:sence_sence/permission/permission_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/route/route.dart';
@@ -40,6 +41,7 @@ class _SenceAppState extends State<SenceApp> {
               '/history': (context) => HistoryScreen(),
               '/permission': (context) => PermissionScreen(),
               '/profile': (context) => ProfileScreen(),
+              '/maps': (context) => MapsScreen(),
             },
           );
         }

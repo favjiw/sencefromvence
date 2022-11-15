@@ -4,11 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:sence_sence/history/history_screen.dart';
-import 'package:sence_sence/permission/permission_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
-import 'package:sence_sence/widget/botnavbar.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -221,7 +217,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     btnOkColor: btnMain,
                                     showCloseIcon: false,
                                     btnOkText: 'Kembali',
-                                    btnOkOnPress: () {},
+                                    btnOkOnPress: () {
+                                      Navigator.pushNamed(context, '/maps');
+                                    },
                                   ).show();
                                 },
                                 style: TextButton.styleFrom(
