@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:sence_sence/home/controller/maps_controller.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -15,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  MapController mapController = new MapController();
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -22,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late String dateEnd = yearNow + " 07:00:00";
   late DateTime timeStart = DateTime.parse(dateStart);
   late DateTime timeEnd = DateTime.parse(dateEnd);
-  late int nis;
+  int nis = 0;
 
   bool isCanPresentIn() {
     if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
@@ -218,7 +220,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     showCloseIcon: false,
                                     btnOkText: 'Kembali',
                                     btnOkOnPress: () {
-                                      Navigator.pushNamed(context, '/maps');
+                                      // Navigator.pushNamed(context, '/maps');
+                                      // print("pindah");
+                                      mapController.validateUserLocation();
+                                      print(mapController.isInSelectedArea);
                                     },
                                   ).show();
                                 },

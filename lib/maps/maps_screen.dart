@@ -17,6 +17,7 @@ class MapsScreen extends StatefulWidget {
 
 class _MapsScreenState extends State<MapsScreen> {
   bool isInSelectedArea = true;
+
   late List<mp_tool.LatLng> convertedPolygonPoints = polygonPoints
       .map((point) => mp_tool.LatLng(point.latitude, point.longitude))
       .toList();
@@ -109,7 +110,11 @@ class _MapsScreenState extends State<MapsScreen> {
         onPressed: () async {
           getUserCurrentLocation().then((value) async {
             print(value.latitude.toString() + " " + value.longitude.toString());
-
+            print("");
+            print("ini berhasil terjalankan");
+            print("");
+            //check
+            checkUpdatedLocation(LatLng(value.latitude, value.longitude));
             // marker added for current users location
             _markers.add(
               Marker(
@@ -118,21 +123,6 @@ class _MapsScreenState extends State<MapsScreen> {
                 infoWindow: InfoWindow(
                   title: 'Lokasi Saya',
                 ),
-                onDragEnd: (updatedLatLng) {
-                  checkUpdatedLocation(updatedLatLng);
-                  print("Halooo ini kejalanin loh tai");
-                  if(isInSelectedArea == true){
-                    buildSuccessDialog(context);
-                    print("");
-                    print("bisa abseeennnnn");
-                    print("");
-                  }else{
-                    buildFailedDialog(context);
-                    print("");
-                    print("ga bisa abseeennnnn");
-                    print("");
-                  }
-                },
               ),
             );
 
@@ -147,6 +137,17 @@ class _MapsScreenState extends State<MapsScreen> {
                 .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
             setState(() {});
           });
+          if(isInSelectedArea == true){
+            buildSuccessDialog(context);
+            print("");
+            print("ini success ");
+            print("");
+          }else{
+            buildFailedDialog(context);
+            print("");
+            print("ini gagal ");
+            print("");
+          }
         },
         child: Icon(Icons.local_activity),
       ),
@@ -187,5 +188,25 @@ class _MapsScreenState extends State<MapsScreen> {
       btnOkText: 'Kembali',
       btnOkOnPress: () {},
     );
+
+  }
+  bool checkUserCanPresence(){
+    late bool canPresense;
+    if(isInSelectedArea == true){
+      setState(() {
+        canPresense = true;
+      });
+      print("");
+      print("ini success ");
+      print("");
+    }else{
+      setState(() {
+        canPresense = false;
+      });
+      print("");
+      print("ini gagal ");
+      print("");
+    }
+    return canPresense;
   }
 }
