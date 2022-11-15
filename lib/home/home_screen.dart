@@ -16,7 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  MapController mapController = new MapController();
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -24,7 +23,9 @@ class _HomeScreenState extends State<HomeScreen> {
   late String dateEnd = yearNow + " 07:00:00";
   late DateTime timeStart = DateTime.parse(dateStart);
   late DateTime timeEnd = DateTime.parse(dateEnd);
-  int nis = 0;
+  String nis = "";
+
+  MapController mapController = new MapController();
 
   bool isCanPresentIn() {
     if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
@@ -42,12 +43,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<int> asyncNIS() async {
     return await SessionManager().get("user");
   }
+
   @override
   Widget build(BuildContext context) {
 
     asyncNIS().then((value) {
       setState(() {
-        this.nis = value;
+        this.nis = '$value';
       });
     });
 
@@ -76,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: HomeTitle,
                         ),
                         Text(
-                          "$nis"
+                          nis
                           ,style: HomeTitle,
                         ),
                       ],
