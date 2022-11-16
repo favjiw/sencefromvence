@@ -6,11 +6,7 @@ import 'package:sence_sence/shared/theme.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-// import 'package:firebase_database/ui/firebase_animated_list.dart';
-
 import 'package:sence_sence/widget/botnavbar.dart';
 
 String _hash(String text) {
@@ -27,24 +23,12 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-void main() async{
-  String userId = "/users/-NGQGAeXHh3ZyWxD4JQE";
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  runApp(MyApp());
-}
-
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _nis = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-
-    main();
-
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
