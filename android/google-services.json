@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "13350014563",
+    "firebase_url": "https://schroom-9b2c6-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "schroom-9b2c6",
+    "storage_bucket": "schroom-9b2c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:13350014563:android:39d0f61c13455f8d9e7256",
+        "android_client_info": {
+          "package_name": "com.example.sence_sence"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "13350014563-8monmuosp78egtnlugm3c0q49s9ic00i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3TXRtQd0RFmftazpHHDpJTUnsy9bfbE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "13350014563-8monmuosp78egtnlugm3c0q49s9ic00i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
