@@ -23,8 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
   late String dateStart = yearNow + " 06:00:00";
   late String dateEnd = yearNow + " 07:00:00";
+  late String morningStart = yearNow + " 00:00:00";
+  late String morningEnd = yearNow + " 12:00:00";
   late DateTime timeStart = DateTime.parse(dateStart);
   late DateTime timeEnd = DateTime.parse(dateEnd);
+  late DateTime dayStart = DateTime.parse(morningStart);
+  late DateTime dayEnd = DateTime.parse(morningEnd);
   String nis = "";
 
   MapController mapController = new MapController();
@@ -42,7 +46,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return canPresent;
   }
 
+<<<<<<< HEAD
   Future<dynamic> asyncNIS() async {
+=======
+  bool statusTime(){
+    late bool isMorning;
+    if(currentTime.isAfter(dayStart) && currentTime.isBefore(dayEnd)){
+      setState(() {
+        isMorning = true;
+      });
+    }else{
+      setState(() {
+        isMorning = false;
+      });
+    }
+    return isMorning;
+  }
+
+  Future<int> asyncNIS() async {
+>>>>>>> 4135f663e6fe683dc93408fe96a9ecde284ddb55
     return await SessionManager().get("user");
   }
 
@@ -136,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Kamu belum melakukan presensi masuk',
+                        statusTime() == true
+                            ? 'Kamu belum melakukan presensi masuk'
+                            : 'Kamu belum melakukan presensi keluar',
                         style: HomeTitleWhitee,
                       ),
                       Text(
@@ -168,7 +192,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: 14.w,
                           ),
                           Text(
-                            '07:00',
+                            statusTime() == true ? '07:00' : '16:00',
                             style: HomeTimeWhite,
                           ),
                         ],
