@@ -1,3 +1,4 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -168,10 +169,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(5.r),
                         child: ElevatedButton(
                           onPressed: () async {
-                            print("Session exist : ${await SessionManager().containsKey("id") == true ? "true": "false"}");
+                            bool valid = false;
                             String nis = _nis.text;
                             String password = _password.text;
-                            if (nis == "2021118576" && password =="12345678") {
+
+                            final snapshot = await FirebaseDatabase.instance.ref().child("users").get();
+
+                            if (snapshot.exists) {
+                              (snapshot.value as Map<dynamic, dynamic>)
+                                  .forEach((key, val) {
+                                    if("${val["id"]}" == nis && "${val["password"]}" == _hash(password)) {
+                                      print("Found!");
+                                      valid = true;
+                                    }
+                              });
+                            }
+                            if(valid) {
+                              print("Session exist : ${await SessionManager().containsKey("id") == true ? "true": "false"}");
                               await SessionManager().set("user", nis);
                               print(await SessionManager().get("user"));
                               Navigator.pushNamedAndRemoveUntil( context, '/nav-bar', (route) => false);
@@ -180,6 +194,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   MaterialPageRoute(
                                     builder: (context) => const BotNavBar(),
                                   ));
+                            }else {
+                              print("Username/Password kamu salah");
                             }
                           },
                           style: ButtonStyle(

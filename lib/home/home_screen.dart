@@ -19,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Query dbRef = FirebaseDatabase.instance.ref().child('presence');
+  Query dbPresence = FirebaseDatabase.instance.ref().child('presence');
 
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
@@ -66,6 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<int> asyncNIS() async {
     return await SessionManager().get("user");
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -231,28 +233,28 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.error,
-                                    headerAnimationLoop: false,
-                                    animType: AnimType.bottomSlide,
-                                    title: 'Warning',
-                                    titleTextStyle: popUpWarningTitle,
-                                    desc: 'Kamu belum bisa presensi sekarang',
-                                    descTextStyle: popUpWarningDesc,
-                                    buttonsTextStyle: whiteOnBtnSmall,
-                                    buttonsBorderRadius:
-                                        BorderRadius.circular(6.r),
-                                    btnOkColor: btnMain,
-                                    showCloseIcon: false,
-                                    btnOkText: 'Kembali',
-                                    btnOkOnPress: () {
-                                      // Navigator.pushNamed(context, '/maps');
-                                      // print("pindah");
-                                      mapController.validateUserLocation();
-                                      print(mapController.isInSelectedArea);
-                                    },
-                                  ).show();
+                                  // AwesomeDialog(
+                                  //   context: context,
+                                  //   dialogType: DialogType.error,
+                                  //   headerAnimationLoop: false,
+                                  //   animType: AnimType.bottomSlide,
+                                  //   title: 'Warning',
+                                  //   titleTextStyle: popUpWarningTitle,
+                                  //   desc: 'Kamu belum bisa presensi sekarang',
+                                  //   descTextStyle: popUpWarningDesc,
+                                  //   buttonsTextStyle: whiteOnBtnSmall,
+                                  //   buttonsBorderRadius:
+                                  //       BorderRadius.circular(6.r),
+                                  //   btnOkColor: btnMain,
+                                  //   showCloseIcon: false,
+                                  //   btnOkText: 'Kembali',
+                                  //   btnOkOnPress: () {
+                                  //     // Navigator.pushNamed(context, '/maps');
+                                  //     // print("pindah");
+                                  //     mapController.validateUserLocation();
+                                  //     print(mapController.isInSelectedArea);
+                                  //   },
+                                  // ).show();
                                 },
                                 style: TextButton.styleFrom(
                                   backgroundColor: HexColor("#E5E5E5"),
@@ -389,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 430.h,
                 child: FirebaseAnimatedList(
                     physics: NeverScrollableScrollPhysics(),
-                    query: dbRef,
+                    query: dbPresence,
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
                       Map presence = snapshot.value as Map;
@@ -398,6 +400,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return itemList(presence: presence);
                     }),
               ),
+              SizedBox(height: 100.h)
             ],
           ),
         ),
@@ -449,8 +452,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 4.h,
                       ),
                       Text(
-                        // hourFormatter(presence['time_in']).toString(),
-                        presence['time_in'],
+                        presence["time_in"].split(" ").last != "0" ? presence["time_in"].split(" ").last : "-",
                         style: activityTime,
                       ),
                     ],
@@ -477,8 +479,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 4.h,
                       ),
                       Text(
-                        // hourFormatter(presence['time_out']).toString(),
-                        presence['time_out'],
+                        presence["time_out"].split(" ").last != "0" ? presence["time_out"].split(" ").last : "-",
                         style: activityTime,
                       ),
                     ],
