@@ -7,6 +7,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:sence_sence/home/controller/maps_controller.dart';
+import 'package:firebase_database/firebase_database.dart';
+// import 'package:firebase_database/ui/firebase_animated_list.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -40,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return canPresent;
   }
 
-  Future<int> asyncNIS() async {
+  Future<dynamic> asyncNIS() async {
     return await SessionManager().get("user");
   }
 
