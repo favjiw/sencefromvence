@@ -1,3 +1,4 @@
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +8,8 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:sence_sence/home/controller/maps_controller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -16,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Query dbRef = FirebaseDatabase.instance.ref().child('presence');
+
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -44,13 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
     return canPresent;
   }
 
-  bool statusTime(){
+  bool statusTime() {
     late bool isMorning;
-    if(currentTime.isAfter(dayStart) && currentTime.isBefore(dayEnd)){
+    if (currentTime.isAfter(dayStart) && currentTime.isBefore(dayEnd)) {
       setState(() {
         isMorning = true;
       });
-    }else{
+    } else {
       setState(() {
         isMorning = false;
       });
@@ -64,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     asyncNIS().then((value) {
       setState(() {
         this.nis = '$value';
@@ -96,8 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: HomeTitle,
                         ),
                         Text(
-                          nis
-                          ,style: HomeTitle,
+                          nis,
+                          style: HomeTitle,
                         ),
                       ],
                     ),
@@ -237,7 +241,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     desc: 'Kamu belum bisa presensi sekarang',
                                     descTextStyle: popUpWarningDesc,
                                     buttonsTextStyle: whiteOnBtnSmall,
-                                    buttonsBorderRadius: BorderRadius.circular(6.r),
+                                    buttonsBorderRadius:
+                                        BorderRadius.circular(6.r),
                                     btnOkColor: btnMain,
                                     showCloseIcon: false,
                                     btnOkText: 'Kembali',
@@ -379,105 +384,118 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: 5,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Column(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 11.h, horizontal: 15.w),
-                          width: 329.w,
-                          height: 74.h,
-                          decoration: BoxDecoration(
-                              color: white,
-                              borderRadius: BorderRadius.circular(6.r),
-                              border: Border.all(
-                                color: grayBorder,
-                                width: 1.w,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                    color:
-                                        HexColor('#C9C9C9').withOpacity(0.10),
-                                    offset: const Offset(0, 4),
-                                    blurRadius: 6),
-                              ]),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Masuk",
-                                        style: activityLabel,
-                                      ),
-                                      SizedBox(
-                                        height: 4.h,
-                                      ),
-                                      Text(
-                                        "06:51:07",
-                                        style: activityTime,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 30.w,
-                                  ),
-                                  Container(
-                                    width: 1.w,
-                                    height: 30.h,
-                                    color: grayUnselect,
-                                  ),
-                                  SizedBox(
-                                    width: 30.w,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Keluar",
-                                        style: activityLabel,
-                                      ),
-                                      SizedBox(
-                                        height: 4.h,
-                                      ),
-                                      Text(
-                                        "-",
-                                        style: activityTime,
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                "07 Nov 22",
-                                style: activityDateGray,
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10.h,
-                        ),
-                      ],
-                    );
-                  }),
+              SizedBox(
+                width: 329.w,
+                height: 430.h,
+                child: FirebaseAnimatedList(
+                    physics: NeverScrollableScrollPhysics(),
+                    query: dbRef,
+                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      Map presence = snapshot.value as Map;
+                      presence['key'] = snapshot.key;
+                      // print(presence['time_in']);
+                      return itemList(presence: presence);
+                    }),
+              ),
             ],
           ),
         ),
       ),
       // bottomNavigationBar: BotNavBar(),
+    );
+  }
+  String hourFormatter(String fullDate){
+    DateTime date = DateTime.parse(fullDate);
+    String hourFormatted = DateFormat('yyyy-MM-dd').format(date);
+    // DateTime timeEnd = DateTime.parse(hourFormatted);
+    return hourFormatted;
+  }
+  Widget itemList({required presence}) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
+          width: 329.w,
+          height: 74.h,
+          decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.circular(6.r),
+              border: Border.all(
+                color: grayBorder,
+                width: 1.w,
+              ),
+              boxShadow: [
+                BoxShadow(
+                    color: HexColor('#C9C9C9').withOpacity(0.10),
+                    offset: const Offset(0, 4),
+                    blurRadius: 6),
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Masuk",
+                        style: activityLabel,
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      Text(
+                        // hourFormatter(presence['time_in']).toString(),
+                        presence['time_in'],
+                        style: activityTime,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 30.w,
+                  ),
+                  Container(
+                    width: 1.w,
+                    height: 30.h,
+                    color: grayUnselect,
+                  ),
+                  SizedBox(
+                    width: 30.w,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Keluar",
+                        style: activityLabel,
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      Text(
+                        // hourFormatter(presence['time_out']).toString(),
+                        presence['time_out'],
+                        style: activityTime,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                "07 Nov 22",
+                style: activityDateGray,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+      ],
     );
   }
 }

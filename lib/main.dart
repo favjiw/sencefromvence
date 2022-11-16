@@ -12,14 +12,8 @@ import 'package:sence_sence/widget/botnavbar.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async{
-  await Firebase.initializeApp(
-    options: const FirebaseOptions(
-        apiKey: "AIzaSyCs4WR9qTVA3C8cB8sAOdk7iu6TMFlEXRE",
-        appId: "App id here",
-        messagingSenderId: "Messaging sender id here",
-        projectId: "project id here"),
-  );
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const SenceApp());
 }
 
