@@ -201,12 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     builder: (context) => const BotNavBar(),
                                   ));
                             }else {
-                              Navigator.pushNamedAndRemoveUntil( context, '/nav-bar', (route) => false);
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const BotNavBar(),
-                                  ));
+                              print("Username/password salah");
                             }
                           },
                           style: ButtonStyle(
