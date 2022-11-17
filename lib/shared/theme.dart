@@ -329,6 +329,18 @@ TextStyle popUpWarningDesc = GoogleFonts.poppins(
   fontWeight: FontWeight.w400,
 );
 
+TextStyle elseTitle = GoogleFonts.poppins(
+  fontSize: 14.sp,
+  color: HexColor('#474747'),
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle elseDesc = GoogleFonts.poppins(
+  fontSize: 12.sp,
+  color: grayUnselect,
+  fontWeight: FontWeight.w400,
+);
+
 
 
 

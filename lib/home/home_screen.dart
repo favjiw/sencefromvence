@@ -11,7 +11,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:sence_sence/splash/splash_screen.dart';
+import 'package:lottie/lottie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -38,11 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   MapController mapController = new MapController();
 
-  Future<bool> hasPresence(String Id) async{
+  Future<bool> hasPresence(String Id) async {
     bool has = false;
-    final snapshot = await FirebaseDatabase.instance.ref().child("presence").get();
+    final snapshot =
+        await FirebaseDatabase.instance.ref().child("presence").get();
     (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
-      if(val["student_id"] == nis) {
+      if (val["student_id"] == nis) {
         has = true;
       }
     });
@@ -399,13 +400,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 10.h,
               ),
               hasPresence(nis) == false
-              ?
-              FirebaseAnimatedList(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    query: dbPresence.limitToLast(5),
-                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                        Animation<double> animation, int index) {
+                  ? FirebaseAnimatedList(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      query: dbPresence.limitToLast(5),
+                      itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                          Animation<double> animation, int index) {
                         Map presence = snapshot.value as Map;
                         Map validPresence = {};
 
@@ -423,9 +423,36 @@ class _HomeScreenState extends State<HomeScreen> {
                         validPresence['key'] = snapshot.key;
                         // print(presence['time_in']);
                         return itemList(presence: validPresence);
-
-                    })
-                  : Text("Kosong"),
+                      })
+                  : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Lottie.asset(
+                            'asset/images/93134-not-found.json',
+                            width: 140.w,
+                            fit: BoxFit.cover,
+                            repeat: true,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Wah, Presensi\nkamu masih kosong",
+                              style: elseTitle,
+                            ),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Text(
+                              "Yuk, kita hadir\ndi sekolah tepat waktu",
+                              style: elseDesc,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
             ],
           ),
         ),
@@ -442,9 +469,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget itemList({required presence}) {
-    String timeIn = presence["time_in"] != null
-        ? presence["time_in"].split(" ").last
-        : "-";
+    String timeIn =
+        presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
