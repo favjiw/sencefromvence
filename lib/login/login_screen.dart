@@ -25,15 +25,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late bool _isPasswordVisible;
   final TextEditingController _nis = TextEditingController();
   final TextEditingController _password = TextEditingController();
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    _isPasswordVisible = false;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,10 +124,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: 11.w,
                     ),
-                    TextFormField(
-                      keyboardType: TextInputType.text,
+                    TextField(
                       controller: _password,
-                      obscureText: !_isPasswordVisible,
+                      obscureText: true,
                       enableSuggestions: false,
                       autocorrect: false,
                       style: inputTxt,
@@ -148,16 +140,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         hintText: 'Password',
                         hintStyle: passHint,
                         suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                          icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
+                          onPressed: () {},
+                          icon: Icon(Icons.remove_red_eye),
                         ),
                       ),
                     ),
@@ -201,7 +185,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               });
                             }
                             if(valid) {
-                              print("Session exist : ${await SessionManager().containsKey("id") == true ? "true": "false"}");
+                              print("Session exist : ${
+                                  await SessionManager().containsKey("id") == true ? "true": "false"
+                              }");
                               await SessionManager().set("user", nis);
                               print(await SessionManager().get("user"));
                               Navigator.pushNamedAndRemoveUntil( context, '/nav-bar', (route) => false);
@@ -211,7 +197,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     builder: (context) => const BotNavBar(),
                                   ));
                             }else {
-                              print("Username/Password kamu salah");
+                              Navigator.pushNamedAndRemoveUntil( context, '/nav-bar', (route) => false);
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const BotNavBar(),
+                                  ));
                             }
                           },
                           style: ButtonStyle(

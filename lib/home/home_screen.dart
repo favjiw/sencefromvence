@@ -1,4 +1,5 @@
 import 'package:firebase_database/ui/firebase_animated_list.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,6 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   MapController mapController = new MapController();
 
+  get currentKey => null;
+
   bool isCanPresentIn() {
     if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
       setState(() {
@@ -66,8 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<int> asyncNIS() async {
     return await SessionManager().get("user");
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -233,28 +234,28 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  // AwesomeDialog(
-                                  //   context: context,
-                                  //   dialogType: DialogType.error,
-                                  //   headerAnimationLoop: false,
-                                  //   animType: AnimType.bottomSlide,
-                                  //   title: 'Warning',
-                                  //   titleTextStyle: popUpWarningTitle,
-                                  //   desc: 'Kamu belum bisa presensi sekarang',
-                                  //   descTextStyle: popUpWarningDesc,
-                                  //   buttonsTextStyle: whiteOnBtnSmall,
-                                  //   buttonsBorderRadius:
-                                  //       BorderRadius.circular(6.r),
-                                  //   btnOkColor: btnMain,
-                                  //   showCloseIcon: false,
-                                  //   btnOkText: 'Kembali',
-                                  //   btnOkOnPress: () {
-                                  //     // Navigator.pushNamed(context, '/maps');
-                                  //     // print("pindah");
-                                  //     mapController.validateUserLocation();
-                                  //     print(mapController.isInSelectedArea);
-                                  //   },
-                                  // ).show();
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    headerAnimationLoop: false,
+                                    animType: AnimType.bottomSlide,
+                                    title: 'Warning',
+                                    titleTextStyle: popUpWarningTitle,
+                                    desc: 'Kamu belum bisa presensi sekarang',
+                                    descTextStyle: popUpWarningDesc,
+                                    buttonsTextStyle: whiteOnBtnSmall,
+                                    buttonsBorderRadius:
+                                        BorderRadius.circular(6.r),
+                                    btnOkColor: btnMain,
+                                    showCloseIcon: false,
+                                    btnOkText: 'Kembali',
+                                    btnOkOnPress: () {
+                                      // Navigator.pushNamed(context, '/maps');
+                                      // print("pindah");
+                                      mapController.validateUserLocation();
+                                      print(mapController.isInSelectedArea);
+                                    },
+                                  ).show();
                                 },
                                 style: TextButton.styleFrom(
                                   backgroundColor: HexColor("#E5E5E5"),
@@ -395,12 +396,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
                       Map presence = snapshot.value as Map;
+                      Map validPresence = {};
+
+                      presence.forEach((key, val) {
+                        if(key == "student_id" && presence[key] == 2021118576) {
+                          validPresence = presence;
+                        }
+                      });
+                      // (snapshot.value as Map).forEach((key, val) {
+                      //   print(presence.know)
+                      // });
+
                       presence['key'] = snapshot.key;
+                      validPresence['key'] = snapshot.key;
                       // print(presence['time_in']);
-                      return itemList(presence: presence);
+                      return itemList(presence: validPresence);
                     }),
               ),
-              SizedBox(height: 100.h)
             ],
           ),
         ),
@@ -415,6 +427,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return hourFormatted;
   }
   Widget itemList({required presence}) {
+    String timeIn = presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
+    String timeOut = presence["time_out"] != null ? presence["time_out"].split(" ").last : "-";
+
     return Column(
       children: [
         Container(
@@ -452,7 +467,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 4.h,
                       ),
                       Text(
-                        presence["time_in"].split(" ").last != "0" ? presence["time_in"].split(" ").last : "-",
+                        // hourFormatter(presence['time_in']).toString(),
+                        timeIn,
                         style: activityTime,
                       ),
                     ],
@@ -479,7 +495,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 4.h,
                       ),
                       Text(
-                        presence["time_out"].split(" ").last != "0" ? presence["time_out"].split(" ").last : "-",
+                        // hourFormatter(presence['time_out']).toString(),
+                        timeOut,
                         style: activityTime,
                       ),
                     ],
