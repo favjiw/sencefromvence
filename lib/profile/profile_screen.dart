@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/appbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -252,7 +253,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 18.h),
             InkWell(
-              onTap: () {},
+              onTap: () async {
+                final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                sharedPreferences.remove('nis');
+                Navigator.pushNamed(context, '/login');
+              },
               child: Column(
                 children: [
                   Padding(
