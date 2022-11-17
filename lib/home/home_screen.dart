@@ -503,55 +503,59 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Masuk",
-                              style: activityLabel,
-                            ),
-                            SizedBox(
-                              height: 4.h,
-                            ),
-                            Text(
-                              // hourFormatter(presence['time_in']).toString(),
-                              timeIn,
-                              style: activityTime,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          width: 30.w,
-                        ),
-                        Container(
-                          width: 1.w,
-                          height: 30.h,
-                          color: grayUnselect,
-                        ),
-                        SizedBox(
-                          width: 30.w,
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Keluar",
-                              style: activityLabel,
-                            ),
-                            SizedBox(
-                              height: 4.h,
-                            ),
-                            Text(
-                              // hourFormatter(presence['time_out']).toString(),
-                              timeOut,
-                              style: activityTime,
-                            ),
-                          ],
-                        ),
-                      ],
+                    SizedBox(
+                      width: 190.w,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Masuk",
+                                style: activityLabel,
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Text(
+                                // hourFormatter(presence['time_in']).toString(),
+                                timeIn,
+                                style: activityTime,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            width: 30.w,
+                          ),
+                          Container(
+                            width: 1.w,
+                            height: 30.h,
+                            color: grayUnselect,
+                          ),
+                          SizedBox(
+                            width: 30.w,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Keluar",
+                                style: activityLabel,
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Text(
+                                // hourFormatter(presence['time_out']).toString(),
+                                timeOut,
+                                style: activityTime,
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     Text(
                       "07 Nov 22",
