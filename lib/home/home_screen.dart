@@ -38,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   MapController mapController = new MapController();
 
-  get currentKey => null;
 
   bool isCanPresentIn() {
     if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
@@ -388,33 +387,31 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              SizedBox(
-                width: 329.w,
-                height: 430.h,
-                child: FirebaseAnimatedList(
+              FirebaseAnimatedList(
+                    shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
-                    query: dbPresence,
+                    query: dbPresence.limitToLast(5),
                     itemBuilder: (BuildContext context, DataSnapshot snapshot,
                         Animation<double> animation, int index) {
-                      Map presence = snapshot.value as Map;
-                      Map validPresence = {};
+                        Map presence = snapshot.value as Map;
+                        Map validPresence = {};
 
-                      presence.forEach((key, val) {
-                        if (key == "student_id" &&
-                            presence[key] == 2021118576) {
-                          validPresence = presence;
-                        }
-                      });
-                      // (snapshot.value as Map).forEach((key, val) {
-                      //   print(presence.know)
-                      // });
+                        presence.forEach((key, val) {
+                          if (key == "student_id" &&
+                              presence[key] == 2021118576) {
+                            validPresence = presence;
+                          }
+                        });
+                        // (snapshot.value as Map).forEach((key, val) {
+                        //   print(presence.know)
+                        // });
 
-                      presence['key'] = snapshot.key;
-                      validPresence['key'] = snapshot.key;
-                      // print(presence['time_in']);
-                      return itemList(presence: validPresence);
+                        presence['key'] = snapshot.key;
+                        validPresence['key'] = snapshot.key;
+                        // print(presence['time_in']);
+                        return itemList(presence: validPresence);
+
                     }),
-              ),
             ],
           ),
         ),
@@ -431,11 +428,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget itemList({required presence}) {
-    String timeIn =
-        presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
+    String timeIn = presence["time_in"] != null
+        ? presence["time_in"].split(" ").last
+        : "-";
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
+
+    if (timeIn == "0") timeIn = "-";
+    if (timeOut == "0") timeOut = "-";
 
     return timeIn == "-" && timeOut == "-"
         ? SizedBox()
