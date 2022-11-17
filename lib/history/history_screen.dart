@@ -1,6 +1,8 @@
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/appbar.dart';
@@ -14,9 +16,27 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen>
-    with SingleTickerProviderStateMixin {
+class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProviderStateMixin {
+  Query dbPresence = FirebaseDatabase.instance.ref().child('presence');
   late TabController tabController;
+  String nis = "";
+
+  Future<int> asyncNIS() async {
+    return await SessionManager().get("user");
+  }
+
+  Future<bool> hasPresence(String Id) async {
+    bool has = false;
+    final snapshot =
+    await FirebaseDatabase.instance.ref().child("presence").get();
+    (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
+      if (val["student_id"] == nis) {
+        has = true;
+      }
+    });
+
+    return has;
+  }
 
   @override
   void initState() {
@@ -27,6 +47,12 @@ class _HistoryScreenState extends State<HistoryScreen>
 
   @override
   Widget build(BuildContext context) {
+    asyncNIS().then((value) {
+      setState(() {
+        this.nis = '$value';
+      });
+    });
+
     return Scaffold(
       backgroundColor: neutral,
       body: Column(
@@ -103,103 +129,55 @@ class _HistoryScreenState extends State<HistoryScreen>
             tabs: [Text("Hadir"), Text("Absen")],
           ),
           Expanded(
-            child: TabBarView(
+            child:
+            TabBarView(
               controller: tabController,
               children: [
-                ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    itemCount: 5,
-                    physics: ScrollPhysics(),
+                hasPresence(nis) != false
+                    ?
+                FirebaseAnimatedList(
                     shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 11.h, horizontal: 15.w),
-                            width: 329.w,
-                            height: 74.h,
-                            decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(6.r),
-                                border: Border.all(
-                                  color: grayBorder,
-                                  width: 1.w,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color:
-                                          HexColor('#C9C9C9').withOpacity(0.10),
-                                      offset: const Offset(0, 4),
-                                      blurRadius: 6),
-                                ]),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Masuk",
-                                          style: activityLabel,
-                                        ),
-                                        SizedBox(
-                                          height: 4.h,
-                                        ),
-                                        Text(
-                                          "06:51:07",
-                                          style: activityTime,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 30.w,
-                                    ),
-                                    Container(
-                                      width: 1.w,
-                                      height: 30.h,
-                                      color: grayUnselect,
-                                    ),
-                                    SizedBox(
-                                      width: 30.w,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Keluar",
-                                          style: activityLabel,
-                                        ),
-                                        SizedBox(
-                                          height: 4.h,
-                                        ),
-                                        Text(
-                                          "-",
-                                          style: activityTime,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  "07 Nov 22",
-                                  style: activityDateGray,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                        ],
-                      );
-                    }),
+                    physics: NeverScrollableScrollPhysics(),
+                    query: dbPresence.limitToLast(5),
+                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                        Animation<double> animation, int index) {
+                      Map presence = snapshot.value as Map;
+                      Map validPresence = {};
+
+                      presence.forEach((key, val) {
+                        if (key == "student_id" &&
+                            "${presence[key]}" == nis) {
+                          validPresence = presence;
+                        }
+                      });
+                      // (snapshot.value as Map).forEach((key, val) {
+                      //   print(presence.know)
+                      // });
+
+                      presence['key'] = snapshot.key;
+                      validPresence['key'] = snapshot.key;
+                      // print(presence['time_in']);
+                      return itemList(presence: validPresence);
+                    })
+                : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Lottie.asset(
+                      'asset/images/93134-not-found.json',
+                      width: 140.w,
+                      height: 140.h,
+                      fit: BoxFit.cover,
+                      repeat: true,
+                    ),
+                    SizedBox(height: 15.h,),
+                    Text(
+                      "Wah, Presensi\nkamu masih kosong",
+                      style: elseTitleHistory,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
                 ListView.builder(
                     padding: EdgeInsets.symmetric(vertical: 20.h),
                     itemCount: 2,
@@ -299,6 +277,104 @@ class _HistoryScreenState extends State<HistoryScreen>
           ),
         ],
       ),
+    );
+  }
+  Widget itemList({required presence}) {
+    String timeIn =
+    presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
+    String timeOut = presence["time_out"] != null
+        ? presence["time_out"].split(" ").last
+        : "-";
+
+    if (timeIn == "0") timeIn = "-";
+    if (timeOut == "0") timeOut = "-";
+
+    return timeIn == "-" && timeOut == "-"
+        ? SizedBox()
+        : Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
+          width: 329.w,
+          height: 74.h,
+          decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.circular(6.r),
+              border: Border.all(
+                color: grayBorder,
+                width: 1.w,
+              ),
+              boxShadow: [
+                BoxShadow(
+                    color: HexColor('#C9C9C9').withOpacity(0.10),
+                    offset: const Offset(0, 4),
+                    blurRadius: 6),
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Masuk",
+                        style: activityLabel,
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      Text(
+                        // hourFormatter(presence['time_in']).toString(),
+                        timeIn,
+                        style: activityTime,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 30.w,
+                  ),
+                  Container(
+                    width: 1.w,
+                    height: 30.h,
+                    color: grayUnselect,
+                  ),
+                  SizedBox(
+                    width: 30.w,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Keluar",
+                        style: activityLabel,
+                      ),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      Text(
+                        // hourFormatter(presence['time_out']).toString(),
+                        timeOut,
+                        style: activityTime,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Text(
+                "07 Nov 22",
+                style: activityDateGray,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+      ],
     );
   }
 }

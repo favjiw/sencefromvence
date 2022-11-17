@@ -341,6 +341,12 @@ TextStyle elseDesc = GoogleFonts.poppins(
   fontWeight: FontWeight.w400,
 );
 
+TextStyle elseTitleHistory = GoogleFonts.poppins(
+  fontSize: 14.sp,
+  color: HexColor('#474747'),
+  fontWeight: FontWeight.w500,
+);
+
 
 
 

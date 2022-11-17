@@ -399,7 +399,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              hasPresence(nis) == false
+              hasPresence(nis) != false
                   ? FirebaseAnimatedList(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
