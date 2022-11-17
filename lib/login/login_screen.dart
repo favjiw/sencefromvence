@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:sence_sence/widget/botnavbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 String _hash(String text) {
   var bytes = utf8.encode(text);
@@ -172,6 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             bool valid = false;
                             String nis = _nis.text;
                             String password = _password.text;
+                            final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                            sharedPreferences.setString('nis', nis);
 
                             final snapshot = await FirebaseDatabase.instance.ref().child("users").get();
 

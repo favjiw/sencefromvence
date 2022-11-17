@@ -6,10 +6,11 @@ import 'package:sence_sence/login/login_screen.dart';
 import 'package:sence_sence/maps/maps_screen.dart';
 import 'package:sence_sence/permission/permission_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
-import 'package:sence_sence/route/route.dart';
 import 'package:sence_sence/splash/splash_screen.dart';
 import 'package:sence_sence/widget/botnavbar.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();

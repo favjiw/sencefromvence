@@ -10,6 +10,7 @@ import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:sence_sence/splash/splash_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -102,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: HomeTitle,
                         ),
                         Text(
-                          nis,
+                          finalNis!,
                           style: HomeTitle,
                         ),
                       ],

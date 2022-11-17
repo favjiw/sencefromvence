@@ -5,6 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sence_sence/shared/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+String? finalNis;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,10 +18,22 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
 
+  Future getValidationData() async{
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var obtainedNis = sharedPreferences.getString('nis');
+    setState(() {
+      finalNis = obtainedNis!;
+    });
+    print(finalNis);
+  }
+
   @override
   void initState() {
-    Timer(Duration(seconds: 3), () {
-      Navigator.pushNamedAndRemoveUntil( context, '/login', (route) => false);
+    // Timer(Duration(seconds: 3), () {
+    //   Navigator.pushNamedAndRemoveUntil( context, '/login', (route) => false);
+    // });
+    getValidationData().whenComplete(() async {
+      Timer(const Duration(seconds: 2), () => Navigator.pushNamedAndRemoveUntil( context, finalNis == null ? '/login' : '/nav-bar', (route) => false));
     });
     super.initState();
   }
