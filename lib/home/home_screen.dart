@@ -38,6 +38,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
   MapController mapController = new MapController();
 
+  Future<bool> hasPresence(String Id) async{
+    bool has = false;
+    final snapshot = await FirebaseDatabase.instance.ref().child("presence").get();
+    (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
+      if(val["student_id"] == nis) {
+        has = true;
+      }
+    });
+
+    return has;
+  }
 
   bool isCanPresentIn() {
     if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
@@ -387,6 +398,8 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10.h,
               ),
+              hasPresence(nis) == false
+              ?
               FirebaseAnimatedList(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -398,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         presence.forEach((key, val) {
                           if (key == "student_id" &&
-                              presence[key] == 2021118576) {
+                              "${presence[key]}" == nis) {
                             validPresence = presence;
                           }
                         });
@@ -411,7 +424,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         // print(presence['time_in']);
                         return itemList(presence: validPresence);
 
-                    }),
+                    })
+                  : Text("Kosong"),
             ],
           ),
         ),
