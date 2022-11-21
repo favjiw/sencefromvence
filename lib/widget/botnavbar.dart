@@ -5,6 +5,7 @@ import 'package:sence_sence/history/history_screen.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class BotNavBar extends StatefulWidget {
   // final String nis;
@@ -58,7 +59,10 @@ class _BotNavBarState extends State<BotNavBar> {
             btnOkColor: btnMain,
             showCloseIcon: false,
             btnOkText: 'Kembali',
-            btnOkOnPress: () {},
+            btnOkOnPress: () {
+              print("Clicked");
+              Navigator.pushNamed(context, '/webview');
+            },
           ).show();
         },
       ),

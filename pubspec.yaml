@@ -49,6 +49,7 @@ dependencies:
   firebase_database: ^10.0.5
   shared_preferences: ^2.0.15
   lottie: ^2.0.0
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_test:

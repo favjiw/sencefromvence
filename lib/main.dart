@@ -7,9 +7,9 @@ import 'package:sence_sence/maps/maps_screen.dart';
 import 'package:sence_sence/permission/permission_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/splash/splash_screen.dart';
+import 'package:sence_sence/webview/webview_screen.dart';
 import 'package:sence_sence/widget/botnavbar.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 void main() async{
@@ -45,6 +45,7 @@ class _SenceAppState extends State<SenceApp> {
               '/permission': (context) => PermissionScreen(),
               '/profile': (context) => ProfileScreen(),
               '/maps': (context) => MapsScreen(),
+              '/webview': (context) => WebViewScreen(),
             },
           );
         }
