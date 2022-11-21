@@ -1,9 +1,12 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/appbar.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
+
 
 class PermissionScreen extends StatefulWidget {
   const PermissionScreen({Key? key}) : super(key: key);
@@ -15,9 +18,32 @@ class PermissionScreen extends StatefulWidget {
 class _PermissionScreenState extends State<PermissionScreen> {
   bool _isSick = true;
   bool _isPermission = false;
+  String reason = "sakit";
+  String status = "3";
+  late DateTime currentTime = DateTime.now();
+  late String timeNow = DateFormat('yyyy-MM-dd H:m:s').format(DateTime.now());
+  int nis = 0;
+
+
+  late DatabaseReference dbRef;
+
+  @override
+  void initState() {
+    super.initState();
+    dbRef = FirebaseDatabase.instance.ref().child('presence');
+  }
+
+  Future<int> asyncNIS() async {
+    return await SessionManager().get("user");
+  }
 
   @override
   Widget build(BuildContext context) {
+    asyncNIS().then((value) {
+      setState(() {
+        this.nis = value;
+      });
+    });
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -50,6 +76,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             setState(() {
                               _isSick = true;
                               _isPermission = false;
+                              reason = "sakit";
+                              status = "3";
                               print(_isSick);
                             });
                           },
@@ -80,6 +108,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             setState(() {
                               _isSick = false;
                               _isPermission = true;
+                              reason = "izin";
+                              status = "4";
                               print(_isSick);
                             });
                           },
@@ -153,7 +183,19 @@ class _PermissionScreenState extends State<PermissionScreen> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5.r),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                print(reason);
+                print(timeNow);
+                print(nis);
+                print(status);
+                dbRef.push().set({
+                  'reason': reason,
+                  'status': status,
+                  'student_id': nis,
+                  'time_in': timeNow.toString(),
+                  'time_out': timeNow.toString(),
+                });
+              },
               child: Text("Submit", style: whiteOnBtn,),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(btnMain),
