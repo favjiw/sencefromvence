@@ -40,8 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> hasPresence(String Id) async {
     bool has = false;
-    final snapshot =
-        await FirebaseDatabase.instance.ref().child("presence").get();
+    final snapshot = await FirebaseDatabase.instance.ref().child("presence").get();
     (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
       if (val["student_id"] == nis) {
         has = true;
