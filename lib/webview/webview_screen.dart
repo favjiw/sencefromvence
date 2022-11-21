@@ -16,13 +16,19 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String id = "2021118576";
+    String id = "2021118620";
     String w = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
     print("Redirecting to https://flask-facerec.herokuapp.com/login?id=$id&w=$w");
     return Scaffold(
       body: WebView(
         javascriptMode: JavascriptMode.unrestricted,
         initialUrl: 'https://flask-facerec.herokuapp.com/login?id=$id&w=$w',
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Icon(Icons.arrow_back_ios_new_rounded),
       ),
     );
   }

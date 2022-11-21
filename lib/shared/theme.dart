@@ -93,23 +93,23 @@ TextStyle activityDate = GoogleFonts.poppins(
 
 TextStyle splashAppName = GoogleFonts.poppins(
     fontSize: 32.sp,
-    color: Colors.black,
-    fontWeight: FontWeight.w700,
-    letterSpacing: 5,
+    color: white,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 3,
 );
 
-TextStyle splashFor = GoogleFonts.poppins(
+TextStyle splashBy = GoogleFonts.poppins(
     fontSize: 16.sp,
-    color: Colors.black,
+    color: grayUnselect,
     fontWeight: FontWeight.w500,
-    letterSpacing: 5,
+    letterSpacing: 3,
 );
 
-TextStyle splashFrom = GoogleFonts.poppins(
+TextStyle splashVence = GoogleFonts.poppins(
   fontSize: 16.sp,
-  color: btnMain,
+  color: white,
   fontWeight: FontWeight.w500,
-  letterSpacing: 5,
+  letterSpacing: 3,
 );
 
 TextStyle masukLogin = GoogleFonts.poppins(

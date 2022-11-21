@@ -17,9 +17,9 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-  Future getValidationData() async{
-    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+  Future getValidationData() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
     var obtainedNis = sharedPreferences.getString('nis');
     setState(() {
       finalNis = obtainedNis!;
@@ -29,40 +29,49 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    // Timer(Duration(seconds: 3), () {
-    //   Navigator.pushNamedAndRemoveUntil( context, '/login', (route) => false);
-    // });
     getValidationData().whenComplete(() async {
       Timer(const Duration(seconds: 2), () => Navigator.pushNamedAndRemoveUntil( context, finalNis == null ? '/login' : '/nav-bar', (route) => false));
     });
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-          statusBarBrightness: Brightness.dark, // here what you need
-          statusBarIconBrightness: Brightness.dark, // here is what you need,
-          statusBarColor: HexColor('#F5F5F5'),
+          statusBarBrightness: Brightness.light, // here what you need
+          statusBarIconBrightness: Brightness.light, // here is what you need,
+          statusBarColor: Colors.black.withOpacity(0.2),
           systemNavigationBarColor: Colors.black.withOpacity(0.8)),
       child: Scaffold(
         backgroundColor: HexColor('#F6FDFF'),
-        body: Stack(
-          children: [
-            Positioned(
-              top: 125.h,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 53.w),
+        body: Container(
+          width: 1.sw,
+          height: 1.sh,
+          decoration: BoxDecoration(
+            gradient: RadialGradient(colors: [
+              HexColor("#5295FD"),
+              HexColor("#0063FC"),
+            ]),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 155.h,
+                left: 100.w,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'asset/images/logo.png',
-                      width: 255.w,
-                      height: 255.h,
+                    Center(
+                      child: Image.asset(
+                        'asset/images/img-logo.png',
+                        width: 155.w,
+                        height: 255.h,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                     SizedBox(
-                      height: 36.h,
+                      height: 26.h,
                     ),
                     Text(
                       'Sence',
@@ -71,30 +80,28 @@ class _SplashScreenState extends State<SplashScreen> {
                   ],
                 ),
               ),
-            ),
-            Positioned(
-              bottom: 24.h,
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 83.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'For',
-                          style: splashFor,
-                        ),
-                        SizedBox(
-                          height: 5.h,
-                        ),
-                        Text(
-                          'SMKN 4 BANDUNG',
-                          style: splashFrom,
-                        ),
-                      ],
+              Positioned(
+                left: 150.w,
+                bottom: 24.h,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'By',
+                      style: splashBy,
+                    ),
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Text(
+                      'Vence',
+                      style: splashVence,
+                    ),
+                  ],
+                ),
               ),
-                  ),
-            )
-          ],
+            ],
+          ),
         ),
       ),
     );
