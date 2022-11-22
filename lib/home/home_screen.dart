@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Selamat Siang,',
+                          'Selamat datang,',
                           style: HomeTitle,
                         ),
                         Text(
@@ -454,6 +454,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (key == "student_id" &&
                               "${presence[key]}" == nis) {
                             validPresence = presence;
+                            print(validPresence);
                           }
                         });
                         // (snapshot.value as Map).forEach((key, val) {
