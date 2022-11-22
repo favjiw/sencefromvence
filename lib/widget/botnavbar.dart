@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sence_sence/history/history_screen.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
@@ -40,11 +39,6 @@ class _BotNavBarState extends State<BotNavBar> {
           height: 35.h,
         ),
         onPressed: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => HistoryScreen(),
-          //     ));
           AwesomeDialog(
             context: context,
             dialogType: DialogType.infoReverse,

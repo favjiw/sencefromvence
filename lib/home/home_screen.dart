@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Selamat Siang',
+                          'Selamat Siang,',
                           style: HomeTitle,
                         ),
                         Text(
@@ -128,22 +128,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: 41.w,
                       height: 41.h,
+                      padding: EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: HexColor('#00DE19'),
                       ),
-                      child: Center(
-                        child: ClipRRect(
+                      child: Container(
+                        width: 35.w,
+                        height: 35.h,
+                        decoration: BoxDecoration(
+                          color: HexColor('#FEFFBF'),
                           borderRadius: BorderRadius.circular(100.r),
-                          child: Image.network(
-                            'https://www.biography.com/.image/ar_1:1%2Cc_fill%2Ccs_srgb%2Cfl_progressive%2Cq_auto:good%2Cw_1200/MTc5OTk2ODUyMTMxNzM0ODcy/gettyimages-1229892983-square.jpg',
-                            width: 35.w,
-                            height: 35.h,
-                            fit: BoxFit.cover,
-                          ),
                         ),
+                        child: Center(
+                            child: Image.asset(
+                              'asset/images/img-profile.png',
+                              width: 26.w,
+                              height: 26.h,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                       ),
-                    ),
+                      ),
                   ],
                 ),
               ),
@@ -240,8 +246,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mapController.validateUserLocation();
                                   print(mapController.isInSelectedArea);
                                   if (mapController.isInSelectedArea == true) {
-
-                                    buildAwesomeDialogSuccessInPresence(context).show();
+                                    buildAwesomeDialogSuccessInPresence(context)
+                                        .show();
                                   } else {
                                     buildAwesomeDialogNotInArea(context).show();
                                   }
@@ -275,7 +281,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mapController.validateUserLocation();
                                   if (mapController.isInSelectedArea == true) {
                                     buildAwesomeDialogSuccessOutPresence(
-                                        context).show();
+                                            context)
+                                        .show();
                                   } else {
                                     buildAwesomeDialogNotInArea(context).show();
                                   }

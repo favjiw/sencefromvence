@@ -7,8 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/appbar.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:sence_sence/widget/botnavbar.dart';
-
 
 class PermissionScreen extends StatefulWidget {
   const PermissionScreen({Key? key}) : super(key: key);
@@ -197,14 +195,14 @@ class _PermissionScreenState extends State<PermissionScreen> {
                   'status': status,
                   'student_id': nis,
                   'time_in': timeNow.toString(),
-                  'time_out': timeReset,
+                  'time_out': timeNow.toString(),
                 });
                 buildSuccessPermissionDialog(context).show();
               },
-              child: Text("Submit", style: whiteOnBtn,),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(btnMain),
               ),
+              child: Text("Submit", style: whiteOnBtn,),
             ),
           ),
         ),

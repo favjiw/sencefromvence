@@ -19,7 +19,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late DatabaseReference dbRef;
   int nis = 0;
 
-
   @override
   void initState() {
     super.initState();
@@ -46,7 +45,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 36.h,),
+                  SizedBox(
+                    height: 36.h,
+                  ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 22.w),
                     child: Row(
@@ -57,7 +58,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           width: 35.w,
                           height: 35.h,
                         ),
-                        Text("Profile", style: appBarTitle,),
+                        Text(
+                          "Profile",
+                          style: appBarTitle,
+                        ),
                         SizedBox(
                           width: 35.w,
                           height: 35.h,
@@ -65,7 +69,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 45.h,),
+                  SizedBox(
+                    height: 45.h,
+                  ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -73,19 +79,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 9.w,
                       ),
                       Container(
+                        padding: EdgeInsets.all(5),
                         width: 60.w,
                         height: 60.h,
                         decoration: BoxDecoration(
                             color: HexColor('#00DE19'), shape: BoxShape.circle),
-                        child: Center(
-                          child: ClipRRect(
+                        child: Container(
+                          width: 35.w,
+                          height: 35.h,
+                          decoration: BoxDecoration(
+                            color: HexColor('#FEFFBF'),
                             borderRadius: BorderRadius.circular(100.r),
-                            child: Image.network(
-                              'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Elon_Musk_2015.jpg/640px-Elon_Musk_2015.jpg',
-                              width: 51.22.w,
-                              height: 51.22.h,
-                              fit: BoxFit.cover,
-                            ),
+                          ),
+                          child: Center(
+                              child: Image.asset(
+                                'asset/images/img-profile.png',
+                                width: 40.w,
+                                height: 40.h,
+                                fit: BoxFit.cover,
+                              ),
                           ),
                         ),
                       ),
@@ -117,9 +129,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(height: 11.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 22.w),
-              child: Text("Setelan", style: profileItemTitle,),
+              child: Text(
+                "Setelan",
+                style: profileItemTitle,
+              ),
             ),
-            SizedBox(height: 31.h,),
+            SizedBox(
+              height: 31.h,
+            ),
             InkWell(
               onTap: () {
                 buildWarningDialog(context).show();
@@ -143,7 +160,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 18.h,),
+                  SizedBox(
+                    height: 18.h,
+                  ),
                   Container(
                     width: 1.sw,
                     height: 1.h,
@@ -152,7 +171,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 17.h,),
+            SizedBox(
+              height: 17.h,
+            ),
             InkWell(
               onTap: () {
                 buildWarningDialog(context).show();
@@ -187,7 +208,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 18.h,),
+                  SizedBox(
+                    height: 18.h,
+                  ),
                   Container(
                     width: 1.sw,
                     height: 1.h,
@@ -196,12 +219,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 13.h,),
+            SizedBox(
+              height: 13.h,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 22.w),
-              child: Text("Akun", style: profileItemTitle,),
+              child: Text(
+                "Akun",
+                style: profileItemTitle,
+              ),
             ),
-            SizedBox(height: 31.h,),
+            SizedBox(
+              height: 31.h,
+            ),
             InkWell(
               onTap: () {
                 buildWarningDialog(context).show();
@@ -225,7 +255,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 18.h,),
+                  SizedBox(
+                    height: 18.h,
+                  ),
                   Container(
                     width: 1.sw,
                     height: 1.h,
@@ -258,7 +290,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 18.h,),
+                  SizedBox(
+                    height: 18.h,
+                  ),
                   Container(
                     width: 1.sw,
                     height: 1.h,
@@ -291,7 +325,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: 18.h,),
+                  SizedBox(
+                    height: 18.h,
+                  ),
                   Container(
                     width: 1.sw,
                     height: 1.h,
@@ -308,49 +344,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   AwesomeDialog buildWarningDialog(BuildContext context) {
     return AwesomeDialog(
-                context: context,
-                dialogType: DialogType.warning,
-                headerAnimationLoop: false,
-                animType: AnimType.bottomSlide,
-                title: 'Maaf :(',
-                titleTextStyle: popUpWarningTitle,
-                desc: 'Fitur ini masih dalam tahap pengembangan',
-                descTextStyle: popUpWarningDesc,
-                buttonsTextStyle: whiteOnBtnSmall,
-                buttonsBorderRadius: BorderRadius.circular(6.r),
-                btnOkColor: btnMain,
-                showCloseIcon: false,
-                btnOkText: 'Kembali',
-                btnOkOnPress: () {},
-              );
-  }
-
-  AwesomeDialog buildLogoutDialog(BuildContext context) {
-    return AwesomeDialog(
       context: context,
       dialogType: DialogType.warning,
       headerAnimationLoop: false,
       animType: AnimType.bottomSlide,
-      title: 'Apakah Kamu yakin ingin logout?',
+      title: 'Maaf :(',
       titleTextStyle: popUpWarningTitle,
-      desc: 'Kamu perlu login kembali setelah melakukan logout',
+      desc: 'Fitur ini masih dalam tahap pengembangan',
       descTextStyle: popUpWarningDesc,
       buttonsTextStyle: whiteOnBtnSmall,
       buttonsBorderRadius: BorderRadius.circular(6.r),
-      btnOkColor: red,
-      btnCancelColor: btnMain,
+      btnOkColor: btnMain,
       showCloseIcon: false,
-      btnOkText: 'Logout',
-      btnOkOnPress: () async {
-        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-        sharedPreferences.remove('nis');
-        // Navigator.pushNamed(context, '/login');
-        Navigator.pushReplacement(context, MaterialPageRoute(
-            builder: (BuildContext context) => LoginScreen(),
-          ),
-        );
-      },
-      btnCancelOnPress: (){}
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
     );
+  }
+
+  AwesomeDialog buildLogoutDialog(BuildContext context) {
+    return AwesomeDialog(
+        context: context,
+        dialogType: DialogType.warning,
+        headerAnimationLoop: false,
+        animType: AnimType.bottomSlide,
+        title: 'Apakah Kamu yakin ingin logout?',
+        titleTextStyle: popUpWarningTitle,
+        desc: 'Kamu perlu login kembali setelah melakukan logout',
+        descTextStyle: popUpWarningDesc,
+        buttonsTextStyle: whiteOnBtnSmall,
+        buttonsBorderRadius: BorderRadius.circular(6.r),
+        btnOkColor: red,
+        btnCancelColor: btnMain,
+        showCloseIcon: false,
+        btnOkText: 'Logout',
+        btnOkOnPress: () async {
+          final SharedPreferences sharedPreferences =
+              await SharedPreferences.getInstance();
+          sharedPreferences.remove('nis');
+          // Navigator.pushNamed(context, '/login');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => LoginScreen(),
+            ),
+          );
+        },
+        btnCancelOnPress: () {});
   }
 }
