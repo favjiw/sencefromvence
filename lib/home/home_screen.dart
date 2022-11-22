@@ -585,7 +585,10 @@ class _HomeScreenState extends State<HomeScreen> {
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
-
+    String fullDate = presence["time_in"];
+    DateTime fullDateTime = DateTime.parse(fullDate);
+    String dateNow = DateFormat('d MMM yy').format(fullDateTime);
+    print(dateNow);
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
@@ -667,7 +670,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Text(
-                      "07 Nov 22",
+                      dateNow,
                       style: activityDateGray,
                     ),
                   ],
