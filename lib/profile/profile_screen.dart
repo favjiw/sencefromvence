@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:sence_sence/login/login_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -268,10 +269,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             SizedBox(height: 18.h),
             InkWell(
-              onTap: () async {
-                final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                sharedPreferences.remove('nis');
-                Navigator.pushNamed(context, '/login');
+              onTap: () {
+                buildLogoutDialog(context).show();
               },
               child: Column(
                 children: [
@@ -283,11 +282,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text(
                           "Logout",
-                          style: profileItem,
+                          style: profileItemLogout,
                         ),
                         Icon(
                           Icons.keyboard_arrow_right_rounded,
-                          color: HexColor('#8B8B8B'),
+                          color: red,
                         ),
                       ],
                     ),
@@ -324,5 +323,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 btnOkText: 'Kembali',
                 btnOkOnPress: () {},
               );
+  }
+
+  AwesomeDialog buildLogoutDialog(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Apakah Kamu yakin ingin logout?',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu perlu login kembali setelah melakukan logout',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: red,
+      btnCancelColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Logout',
+      btnOkOnPress: () async {
+        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+        sharedPreferences.remove('nis');
+        // Navigator.pushNamed(context, '/login');
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (BuildContext context) => LoginScreen(),
+          ),
+        );
+      },
+      btnCancelOnPress: (){}
+    );
   }
 }

@@ -305,6 +305,12 @@ TextStyle profileItem = GoogleFonts.poppins(
   fontWeight: FontWeight.w400,
 );
 
+TextStyle profileItemLogout = GoogleFonts.poppins(
+  fontSize: 14.sp,
+  color: red,
+  fontWeight: FontWeight.w400,
+);
+
 TextStyle botNavActive = GoogleFonts.poppins(
   fontSize: 12.sp,
   color: Colors.black,
