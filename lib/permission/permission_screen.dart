@@ -229,10 +229,11 @@ AwesomeDialog buildSuccessPermissionDialog(BuildContext context) {
       showCloseIcon: false,
       btnOkText: 'Kembali Ke Home',
       btnOkOnPress: () {
-        Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (BuildContext context) => BotNavBar(),
-        ),
-        );
+        // Navigator.pushReplacement(context, MaterialPageRoute(
+        //   builder: (BuildContext context) => BotNavBar(),
+        // ),
+        // );
+        Navigator.pop(context);
       },
   );
 }
