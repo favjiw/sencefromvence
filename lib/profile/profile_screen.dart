@@ -1,10 +1,10 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:sence_sence/shared/theme.dart';
-import 'package:sence_sence/widget/appbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,6 +15,21 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  late DatabaseReference dbRef;
+  int nis = 0;
+
+
+  @override
+  void initState() {
+    super.initState();
+    dbRef = FirebaseDatabase.instance.ref().child('user');
+    // String name = dbRef.equalTo(nis);
+  }
+
+  Future<int> asyncNIS() async {
+    return await SessionManager().get("user");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

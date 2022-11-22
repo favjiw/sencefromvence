@@ -5,7 +5,7 @@ import 'dart:async';
 import 'package:maps_toolkit/maps_toolkit.dart' as mp_tool;
 
 class MapController {
-  bool isInSelectedArea = true;
+  bool isInSelectedArea = false;
 
   late List<mp_tool.LatLng> convertedPolygonPoints = polygonPoints
       .map((point) => mp_tool.LatLng(point.latitude, point.longitude))
@@ -48,23 +48,10 @@ class MapController {
       print(value.latitude.toString() + " " + value.longitude.toString());
       checkUpdatedLocation(LatLng(value.latitude, value.longitude));
       if(isInSelectedArea == true){
-        print("");
         print("ini success");
-        print("");
       }else{
-        print("");
         print("ini gagal");
-        print("");
       }
     });
-    if(isInSelectedArea == true){
-      print("");
-      print("ini success ");
-      print("");
-    }else{
-      print("");
-      print("ini gagal ");
-      print("");
-    }
   }
 }

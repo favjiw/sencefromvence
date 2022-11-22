@@ -22,6 +22,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
   String status = "3";
   late DateTime currentTime = DateTime.now();
   late String timeNow = DateFormat('yyyy-MM-dd H:m:s').format(DateTime.now());
+  late String yearNow = DateFormat('yyyy-MM-dd').format(currentTime);
+  late String timeReset = yearNow + " 00:00:00";
   int nis = 0;
 
 
@@ -193,7 +195,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                   'status': status,
                   'student_id': nis,
                   'time_in': timeNow.toString(),
-                  'time_out': timeNow.toString(),
+                  'time_out': timeReset,
                 });
               },
               child: Text("Submit", style: whiteOnBtn,),

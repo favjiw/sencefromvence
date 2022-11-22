@@ -26,12 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  late String dateStart = yearNow + " 06:00:00";
-  late String dateEnd = yearNow + " 07:00:00";
+  late String presenceMorningStart = yearNow + " 06:00:00";
+  late String presenceMorningEnd = yearNow + " 07:00:00";
+  late String presenceAfternoonStart = yearNow + " 14:00:00";
+  late String presenceAfternoonEnd = yearNow + " 17:00:00";
   late String morningStart = yearNow + " 00:00:00";
   late String morningEnd = yearNow + " 12:00:00";
-  late DateTime timeStart = DateTime.parse(dateStart);
-  late DateTime timeEnd = DateTime.parse(dateEnd);
+  late DateTime presenceInStart = DateTime.parse(presenceMorningStart);
+  late DateTime presenceInEnd = DateTime.parse(presenceMorningEnd);
+  late DateTime presenceOutStart = DateTime.parse(presenceAfternoonStart);
+  late DateTime presenceOutEnd = DateTime.parse(presenceAfternoonEnd);
   late DateTime dayStart = DateTime.parse(morningStart);
   late DateTime dayEnd = DateTime.parse(morningEnd);
   String nis = "";
@@ -40,7 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<bool> hasPresence(String Id) async {
     bool has = false;
-    final snapshot = await FirebaseDatabase.instance.ref().child("presence").get();
+    final snapshot =
+        await FirebaseDatabase.instance.ref().child("presence").get();
     (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
       if (val["student_id"] == nis) {
         has = true;
@@ -51,7 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool isCanPresentIn() {
-    if (currentTime.isAfter(timeStart) && currentTime.isBefore(timeEnd)) {
+    if (currentTime.isAfter(presenceInStart) &&
+        currentTime.isBefore(presenceInEnd)) {
       setState(() {
         canPresent = true;
       });
@@ -212,8 +218,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 16.h,
                       ),
-                      isCanPresentIn() == true
-                          ? Container(
+                      Container(
+                        child: LayoutBuilder(builder: (context, constraints) {
+                          if (currentTime.isAfter(presenceInStart) &&
+                              currentTime.isBefore(presenceInEnd)) {
+                            return Container(
                               width: 287.w,
                               height: 40.h,
                               decoration: BoxDecoration(
@@ -227,7 +236,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                               child: TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  mapController.validateUserLocation();
+                                  print(mapController.isInSelectedArea);
+                                  if (mapController.isInSelectedArea == true) {
+
+                                    buildAwesomeDialogSuccessInPresence(context).show();
+                                  } else {
+                                    buildAwesomeDialogNotInArea(context).show();
+                                  }
+                                },
                                 style: TextButton.styleFrom(
                                   backgroundColor: white,
                                 ),
@@ -236,8 +254,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: WhiteOnButton,
                                 ),
                               ),
-                            )
-                          : Container(
+                            );
+                          } else if (currentTime.isAfter(presenceOutStart) &&
+                              currentTime.isBefore(presenceOutEnd)) {
+                            return Container(
+                              width: 287.w,
+                              height: 40.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.10),
+                                    offset: Offset(0, 4),
+                                    blurRadius: 6,
+                                  ),
+                                ],
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  mapController.validateUserLocation();
+                                  if (mapController.isInSelectedArea == true) {
+                                    buildAwesomeDialogSuccessOutPresence(
+                                        context).show();
+                                  } else {
+                                    buildAwesomeDialogNotInArea(context).show();
+                                  }
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: white,
+                                ),
+                                child: Text(
+                                  "Lakukan Presensi",
+                                  style: WhiteOnButton,
+                                ),
+                              ),
+                            );
+                          } else {
+                            return Container(
                               width: 287.w,
                               height: 40.h,
                               decoration: BoxDecoration(
@@ -245,28 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.error,
-                                    headerAnimationLoop: false,
-                                    animType: AnimType.bottomSlide,
-                                    title: 'Warning',
-                                    titleTextStyle: popUpWarningTitle,
-                                    desc: 'Kamu belum bisa presensi sekarang',
-                                    descTextStyle: popUpWarningDesc,
-                                    buttonsTextStyle: whiteOnBtnSmall,
-                                    buttonsBorderRadius:
-                                        BorderRadius.circular(6.r),
-                                    btnOkColor: btnMain,
-                                    showCloseIcon: false,
-                                    btnOkText: 'Kembali',
-                                    btnOkOnPress: () {
-                                      // Navigator.pushNamed(context, '/maps');
-                                      // print("pindah");
-                                      mapController.validateUserLocation();
-                                      print(mapController.isInSelectedArea);
-                                    },
-                                  ).show();
+                                  buildAwesomeDialogNotInTime(context).show();
                                 },
                                 style: TextButton.styleFrom(
                                   backgroundColor: HexColor("#E5E5E5"),
@@ -276,7 +308,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   style: buttonDisabled,
                                 ),
                               ),
-                            ),
+                            );
+                          }
+                        }),
+                      ),
                     ],
                   ),
                 ),
@@ -424,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         return itemList(presence: validPresence);
                       })
                   : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
                           child: Lottie.asset(
@@ -460,11 +495,80 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  String hourFormatter(String fullDate) {
-    DateTime date = DateTime.parse(fullDate);
-    String hourFormatted = DateFormat('yyyy-MM-dd').format(date);
-    // DateTime timeEnd = DateTime.parse(hourFormatted);
-    return hourFormatted;
+  AwesomeDialog buildAwesomeDialogSuccessOutPresence(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Presensi Berhasil!',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu sudah melakukan presensi keluar',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
+  }
+
+  AwesomeDialog buildAwesomeDialogNotInArea(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Warning',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu tidak berada dalam area SMKN 4 Bandung',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
+  }
+
+  AwesomeDialog buildAwesomeDialogSuccessInPresence(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Presensi Berhasil!',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu sudah melakukan presensi masuk',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
+  }
+
+  AwesomeDialog buildAwesomeDialogNotInTime(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Warning',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu belum bisa presensi sekarang',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
   }
 
   Widget itemList({required presence}) {
@@ -519,7 +623,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 4.h,
                               ),
                               Text(
-                                // hourFormatter(presence['time_in']).toString(),
                                 timeIn,
                                 style: activityTime,
                               ),
@@ -547,7 +650,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 4.h,
                               ),
                               Text(
-                                // hourFormatter(presence['time_out']).toString(),
                                 timeOut,
                                 style: activityTime,
                               ),
