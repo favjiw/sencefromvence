@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/appbar.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
+import 'package:sence_sence/widget/botnavbar.dart';
 
 
 class PermissionScreen extends StatefulWidget {
@@ -197,6 +199,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                   'time_in': timeNow.toString(),
                   'time_out': timeReset,
                 });
+                buildSuccessPermissionDialog(context).show();
               },
               child: Text("Submit", style: whiteOnBtn,),
               style: ButtonStyle(
@@ -208,4 +211,28 @@ class _PermissionScreenState extends State<PermissionScreen> {
       ),
     );
   }
+}
+
+AwesomeDialog buildSuccessPermissionDialog(BuildContext context) {
+  return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Berhasil mengajukan izin!',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu sudah berhasil mengirimkan izin',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali Ke Home',
+      btnOkOnPress: () {
+        Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (BuildContext context) => BotNavBar(),
+        ),
+        );
+      },
+  );
 }
