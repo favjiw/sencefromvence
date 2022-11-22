@@ -41,6 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
   String nis = "";
 
   MapController mapController = new MapController();
+  late DatabaseReference dbRef;
+
+  @override
+  void initState() {
+    super.initState();
+    dbRef = FirebaseDatabase.instance.ref().child('presence');
+  }
 
   Future<bool> hasPresence(String Id) async {
     bool has = false;
@@ -246,6 +253,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   mapController.validateUserLocation();
                                   print(mapController.isInSelectedArea);
                                   if (mapController.isInSelectedArea == true) {
+                                    dbRef.push().set({
+                                      'reason': '',
+                                      'status': '1',
+                                      'student_id': nis,
+                                      'time_in': currentTime.toString(),
+                                      'time_out': '0000-00-00 00:00:00',
+                                    });
                                     buildAwesomeDialogSuccessInPresence(context)
                                         .show();
                                   } else {
