@@ -21,7 +21,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
   String reason = "sakit";
   String status = "3";
   late DateTime currentTime = DateTime.now();
-  late String timeNow = DateFormat('yyyy-MM-dd H:m:s').format(DateTime.now());
+  late String timeNow = DateFormat('yyyy-MM-dd hh:m:s').format(DateTime.now());
   late String yearNow = DateFormat('yyyy-MM-dd').format(currentTime);
   late String timeReset = yearNow + " 00:00:00";
   int nis = 0;
@@ -186,6 +186,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
             borderRadius: BorderRadius.circular(5.r),
             child: ElevatedButton(
               onPressed: () {
+                print("ayayay");
                 print(reason);
                 print(timeNow);
                 print(nis);

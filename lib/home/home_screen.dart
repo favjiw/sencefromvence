@@ -26,6 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
+  late String timeNow = DateFormat('yyyy-MM-dd hh:m:s').format(currentTime);
   late String presenceMorningStart = yearNow + " 06:00:00";
   late String presenceMorningEnd = yearNow + " 07:00:00";
   late String presenceAfternoonStart = yearNow + " 14:00:00";
@@ -257,8 +258,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'reason': '',
                                       'status': '1',
                                       'student_id': nis,
-                                      'time_in': currentTime.toString(),
-                                      'time_out': '0000-00-00 00:00:00',
+                                      'time_in': timeNow,
+                                      'time_out': '0',
                                     });
                                     buildAwesomeDialogSuccessInPresence(context)
                                         .show();
@@ -319,6 +320,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
+                                  dbRef.push().set({
+                                    'reason': '',
+                                    'status': '1',
+                                    'student_id': nis,
+                                    'time_in': timeNow,
+                                    'time_out': '0',
+                                  });
                                   buildAwesomeDialogNotInTime(context).show();
                                 },
                                 style: TextButton.styleFrom(
@@ -602,7 +610,15 @@ class _HomeScreenState extends State<HomeScreen> {
     String fullDate = presence["time_in"];
     DateTime fullDateTime = DateTime.parse(fullDate);
     String dateNow = DateFormat('d MMM yy').format(fullDateTime);
+    // String timePresenceIn = presence["time_in"];
+    // DateTime fullTimeIn = DateTime.parse(timePresenceIn);
+    // String timeIn = DateFormat('hh:m:s').format(fullTimeIn);
+    // String timePresenceOut = presence["time_out"];
+    // DateTime fullTimeOut = DateTime.parse(timePresenceOut);
+    // String timeOut = DateFormat('hh:m:s').format(fullTimeOut);
     print(dateNow);
+    print(timeIn);
+    print(timeOut);
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 

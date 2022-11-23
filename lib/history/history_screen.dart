@@ -135,30 +135,35 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
               children: [
                 hasPresence(nis) != false
                     ?
-                FirebaseAnimatedList(
-                    shrinkWrap: true,
-                    physics: ScrollPhysics(),
-                    query: dbPresence,
-                    itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                        Animation<double> animation, int index) {
-                      Map presence = snapshot.value as Map;
-                      Map validPresence = {};
+                Column(
+                  children: [
+                    SizedBox(height: 20.h),
+                    FirebaseAnimatedList(
+                        shrinkWrap: true,
+                        physics: ScrollPhysics(),
+                        query: dbPresence,
+                        itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                            Animation<double> animation, int index) {
+                          Map presence = snapshot.value as Map;
+                          Map validPresence = {};
 
-                      presence.forEach((key, val) {
-                        if (key == "student_id" &&
-                            "${presence[key]}" == nis) {
-                          validPresence = presence;
-                        }
-                      });
-                      // (snapshot.value as Map).forEach((key, val) {
-                      //   print(presence.know)
-                      // });
+                          presence.forEach((key, val) {
+                            if (key == "student_id" &&
+                                "${presence[key]}" == nis) {
+                              validPresence = presence;
+                            }
+                          });
+                          // (snapshot.value as Map).forEach((key, val) {
+                          //   print(presence.know)
+                          // });
 
-                      presence['key'] = snapshot.key;
-                      validPresence['key'] = snapshot.key;
-                      // print(presence['time_in']);
-                      return itemList(presence: validPresence);
-                    })
+                          presence['key'] = snapshot.key;
+                          validPresence['key'] = snapshot.key;
+                          // print(presence['time_in']);
+                          return itemList(presence: validPresence);
+                        }),
+                  ],
+                )
                 : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
