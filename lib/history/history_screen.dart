@@ -134,36 +134,39 @@ class _HistoryScreenState extends State<HistoryScreen>
               controller: tabController,
               children: [
                 hasPresence(nis) != false
-                    ? Column(
-                        children: [
-                          SizedBox(height: 20.h),
-                          FirebaseAnimatedList(
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                              query: dbPresence,
-                              itemBuilder: (BuildContext context,
-                                  DataSnapshot snapshot,
-                                  Animation<double> animation,
-                                  int index) {
-                                Map presence = snapshot.value as Map;
-                                Map validPresence = {};
+                    ? SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 20.h),
+                            FirebaseAnimatedList(
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                query: dbPresence,
+                                itemBuilder: (BuildContext context,
+                                    DataSnapshot snapshot,
+                                    Animation<double> animation,
+                                    int index) {
+                                  Map presence = snapshot.value as Map;
+                                  Map validPresence = {};
 
-                                presence.forEach((key, val) {
-                                  if (key == "student_id" &&
-                                      "${presence[key]}" == nis) {
-                                    validPresence = presence;
-                                  }
-                                });
-                                // (snapshot.value as Map).forEach((key, val) {
-                                //   print(presence.know)
-                                // });
+                                  presence.forEach((key, val) {
+                                    if (key == "student_id" &&
+                                        "${presence[key]}" == nis) {
+                                      validPresence = presence;
+                                    }
+                                  });
+                                  // (snapshot.value as Map).forEach((key, val) {
+                                  //   print(presence.know)
+                                  // });
 
-                                presence['key'] = snapshot.key;
-                                validPresence['key'] = snapshot.key;
-                                // print(presence['time_in']);
-                                return itemListIsPresent(presence: validPresence);
-                              }),
-                        ],
+                                  presence['key'] = snapshot.key;
+                                  validPresence['key'] = snapshot.key;
+                                  // print(presence['time_in']);
+                                  return itemListIsPresent(
+                                      presence: validPresence);
+                                }),
+                          ],
+                        ),
                       )
                     : Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -187,58 +190,61 @@ class _HistoryScreenState extends State<HistoryScreen>
                         ],
                       ),
                 hasPresence(nis) != false
-                    ? Column(
-                  children: [
-                    SizedBox(height: 20.h),
-                    FirebaseAnimatedList(
-                        shrinkWrap: true,
-                        physics: ScrollPhysics(),
-                        query: dbPresence,
-                        itemBuilder: (BuildContext context,
-                            DataSnapshot snapshot,
-                            Animation<double> animation,
-                            int index) {
-                          Map presence = snapshot.value as Map;
-                          Map validPresence = {};
+                    ? SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 20.h),
+                            FirebaseAnimatedList(
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                query: dbPresence,
+                                itemBuilder: (BuildContext context,
+                                    DataSnapshot snapshot,
+                                    Animation<double> animation,
+                                    int index) {
+                                  Map presence = snapshot.value as Map;
+                                  Map validPresence = {};
 
-                          presence.forEach((key, val) {
-                            if (key == "student_id" &&
-                                "${presence[key]}" == nis) {
-                              validPresence = presence;
-                            }
-                          });
-                          // (snapshot.value as Map).forEach((key, val) {
-                          //   print(presence.know)
-                          // });
+                                  presence.forEach((key, val) {
+                                    if (key == "student_id" &&
+                                        "${presence[key]}" == nis) {
+                                      validPresence = presence;
+                                    }
+                                  });
+                                  // (snapshot.value as Map).forEach((key, val) {
+                                  //   print(presence.know)
+                                  // });
 
-                          presence['key'] = snapshot.key;
-                          validPresence['key'] = snapshot.key;
-                          // print(presence['time_in']);
-                          return itemListIsNotPresent(presence: validPresence);
-                        }),
-                  ],
-                )
+                                  presence['key'] = snapshot.key;
+                                  validPresence['key'] = snapshot.key;
+                                  // print(presence['time_in']);
+                                  return itemListIsNotPresent(
+                                      presence: validPresence);
+                                }),
+                          ],
+                        ),
+                      )
                     : Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Lottie.asset(
-                      'asset/images/93134-not-found.json',
-                      width: 140.w,
-                      height: 140.h,
-                      fit: BoxFit.cover,
-                      repeat: true,
-                    ),
-                    SizedBox(
-                      height: 15.h,
-                    ),
-                    Text(
-                      "Wah, Presensi\nkamu masih kosong",
-                      style: elseTitleHistory,
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'asset/images/93134-not-found.json',
+                            width: 140.w,
+                            height: 140.h,
+                            fit: BoxFit.cover,
+                            repeat: true,
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Text(
+                            "Wah, Presensi\nkamu masih kosong",
+                            style: elseTitleHistory,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
               ],
             ),
           ),
@@ -266,15 +272,15 @@ class _HistoryScreenState extends State<HistoryScreen>
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
-    bool checkStatus(String status){
+    bool checkStatus(String status) {
       return status == "1" || status == "2";
     }
 
-    bool checkTimeStrip(String timeIn, String timeOut){
+    bool checkTimeStrip(String timeIn, String timeOut) {
       late bool isCheckTrue;
-      if(timeIn != "-" || timeOut != "-"){
+      if (timeIn != "-" || timeOut != "-") {
         isCheckTrue = true;
-      }else{
+      } else {
         isCheckTrue = false;
       }
       return isCheckTrue;
@@ -283,7 +289,8 @@ class _HistoryScreenState extends State<HistoryScreen>
     return Container(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          if (checkStatus(statusFromPresence) && checkTimeStrip(timeIn, timeOut)) {
+          if (checkStatus(statusFromPresence) &&
+              checkTimeStrip(timeIn, timeOut)) {
             return Column(
               children: [
                 Container(
@@ -383,7 +390,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   Widget itemListIsNotPresent({required presence}) {
     String statusFromPresence = presence["status"];
     String timeIn =
-    presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
+        presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
@@ -399,15 +406,15 @@ class _HistoryScreenState extends State<HistoryScreen>
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
-    bool checkStatus(String status){
+    bool checkStatus(String status) {
       return status == "0" || status == "3" || status == "4";
     }
 
-    bool checkTimeStrip(String timeIn, String timeOut){
+    bool checkTimeStrip(String timeIn, String timeOut) {
       late bool isCheckTrue;
-      if(timeIn != "-" || timeOut != "-"){
+      if (timeIn != "-" || timeOut != "-") {
         isCheckTrue = true;
-      }else{
+      } else {
         isCheckTrue = false;
       }
       return isCheckTrue;
@@ -421,7 +428,7 @@ class _HistoryScreenState extends State<HistoryScreen>
               children: [
                 Container(
                   padding:
-                  EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
+                      EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
                   width: 329.w,
                   height: 74.h,
                   decoration: BoxDecoration(
