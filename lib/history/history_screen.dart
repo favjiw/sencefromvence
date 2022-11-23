@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:intl/intl.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/appbar.dart';
 import 'package:lottie/lottie.dart';
-
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -16,7 +16,8 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProviderStateMixin {
+class _HistoryScreenState extends State<HistoryScreen>
+    with SingleTickerProviderStateMixin {
   Query dbPresence = FirebaseDatabase.instance.ref().child('presence');
   late TabController tabController;
   String nis = "";
@@ -28,7 +29,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
   Future<bool> hasPresence(String Id) async {
     bool has = false;
     final snapshot =
-    await FirebaseDatabase.instance.ref().child("presence").get();
+        await FirebaseDatabase.instance.ref().child("presence").get();
     (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
       if (val["student_id"] == nis) {
         has = true;
@@ -129,21 +130,74 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
             tabs: [Text("Hadir"), Text("Absen")],
           ),
           Expanded(
-            child:
-            TabBarView(
+            child: TabBarView(
               controller: tabController,
               children: [
                 hasPresence(nis) != false
-                    ?
-                Column(
+                    ? Column(
+                        children: [
+                          SizedBox(height: 20.h),
+                          FirebaseAnimatedList(
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              query: dbPresence,
+                              itemBuilder: (BuildContext context,
+                                  DataSnapshot snapshot,
+                                  Animation<double> animation,
+                                  int index) {
+                                Map presence = snapshot.value as Map;
+                                Map validPresence = {};
+
+                                presence.forEach((key, val) {
+                                  if (key == "student_id" &&
+                                      "${presence[key]}" == nis) {
+                                    validPresence = presence;
+                                  }
+                                });
+                                // (snapshot.value as Map).forEach((key, val) {
+                                //   print(presence.know)
+                                // });
+
+                                presence['key'] = snapshot.key;
+                                validPresence['key'] = snapshot.key;
+                                // print(presence['time_in']);
+                                return itemListIsPresent(presence: validPresence);
+                              }),
+                        ],
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Lottie.asset(
+                            'asset/images/93134-not-found.json',
+                            width: 140.w,
+                            height: 140.h,
+                            fit: BoxFit.cover,
+                            repeat: true,
+                          ),
+                          SizedBox(
+                            height: 15.h,
+                          ),
+                          Text(
+                            "Wah, Presensi\nkamu masih kosong",
+                            style: elseTitleHistory,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                hasPresence(nis) != false
+                    ? Column(
                   children: [
                     SizedBox(height: 20.h),
                     FirebaseAnimatedList(
                         shrinkWrap: true,
                         physics: ScrollPhysics(),
                         query: dbPresence,
-                        itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                            Animation<double> animation, int index) {
+                        itemBuilder: (BuildContext context,
+                            DataSnapshot snapshot,
+                            Animation<double> animation,
+                            int index) {
                           Map presence = snapshot.value as Map;
                           Map validPresence = {};
 
@@ -160,11 +214,11 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                           presence['key'] = snapshot.key;
                           validPresence['key'] = snapshot.key;
                           // print(presence['time_in']);
-                          return itemList(presence: validPresence);
+                          return itemListIsNotPresent(presence: validPresence);
                         }),
                   ],
                 )
-                : Column(
+                    : Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -175,7 +229,9 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                       fit: BoxFit.cover,
                       repeat: true,
                     ),
-                    SizedBox(height: 15.h,),
+                    SizedBox(
+                      height: 15.h,
+                    ),
                     Text(
                       "Wah, Presensi\nkamu masih kosong",
                       style: elseTitleHistory,
@@ -183,100 +239,6 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                     ),
                   ],
                 ),
-                ListView.builder(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    itemCount: 2,
-                    physics: ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 11.h, horizontal: 15.w),
-                            width: 329.w,
-                            height: 74.h,
-                            decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(6.r),
-                                border: Border.all(
-                                  color: grayBorder,
-                                  width: 1.w,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color:
-                                      HexColor('#C9C9C9').withOpacity(0.10),
-                                      offset: const Offset(0, 4),
-                                      blurRadius: 6),
-                                ]),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Masuk",
-                                          style: activityLabel,
-                                        ),
-                                        SizedBox(
-                                          height: 4.h,
-                                        ),
-                                        Text(
-                                          "unpresent",
-                                          style: unpresent,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 30.w,
-                                    ),
-                                    Container(
-                                      width: 1.w,
-                                      height: 30.h,
-                                      color: grayUnselect,
-                                    ),
-                                    SizedBox(
-                                      width: 30.w,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Keluar",
-                                          style: activityLabel,
-                                        ),
-                                        SizedBox(
-                                          height: 4.h,
-                                        ),
-                                        Text(
-                                          "unpresent",
-                                          style: unpresent,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  "07 Nov 22",
-                                  style: activityDateGray,
-                                ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                        ],
-                      );
-                    }),
               ],
             ),
           ),
@@ -284,111 +246,270 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
       ),
     );
   }
-  Widget itemList({required presence}) {
+
+  Widget itemListIsPresent({required presence}) {
+    String statusFromPresence = presence["status"];
+    String timeIn =
+        presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
+    String timeOut = presence["time_out"] != null
+        ? presence["time_out"].split(" ").last
+        : "-";
+    String fullDate = presence["time_in"];
+    DateTime fullDateTime = DateTime.parse(fullDate);
+    String dateNow = DateFormat('d MMM yy').format(fullDateTime);
+    // String timePresenceIn = presence["time_in"];
+    // DateTime fullTimeIn = DateTime.parse(timePresenceIn);
+    // String timeIn = DateFormat('hh:m:s').format(fullTimeIn);
+    // String timePresenceOut = presence["time_out"];
+    // DateTime fullTimeOut = DateTime.parse(timePresenceOut);
+    // String timeOut = DateFormat('hh:m:s').format(fullTimeOut);
+    if (timeIn == "0") timeIn = "-";
+    if (timeOut == "0") timeOut = "-";
+
+    bool checkStatus(String status){
+      return status == "1" || status == "2";
+    }
+
+    bool checkTimeStrip(String timeIn, String timeOut){
+      late bool isCheckTrue;
+      if(timeIn != "-" || timeOut != "-"){
+        isCheckTrue = true;
+      }else{
+        isCheckTrue = false;
+      }
+      return isCheckTrue;
+    }
+
+    return Container(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (checkStatus(statusFromPresence) && checkTimeStrip(timeIn, timeOut)) {
+            return Column(
+              children: [
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
+                  width: 329.w,
+                  height: 74.h,
+                  decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(6.r),
+                      border: Border.all(
+                        color: grayBorder,
+                        width: 1.w,
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                            color: HexColor('#C9C9C9').withOpacity(0.10),
+                            offset: const Offset(0, 4),
+                            blurRadius: 6),
+                      ]),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 190.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Masuk",
+                                  style: activityLabel,
+                                ),
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                                Text(
+                                  timeIn,
+                                  style: activityTime,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 30.w,
+                            ),
+                            Container(
+                              width: 1.w,
+                              height: 30.h,
+                              color: grayUnselect,
+                            ),
+                            SizedBox(
+                              width: 30.w,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Keluar",
+                                  style: activityLabel,
+                                ),
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                                Text(
+                                  timeOut,
+                                  style: activityTime,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Text(
+                        dateNow,
+                        style: activityDateGray,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+              ],
+            );
+          } else {
+            return SizedBox();
+          }
+        },
+      ),
+    );
+  }
+
+  Widget itemListIsNotPresent({required presence}) {
+    String statusFromPresence = presence["status"];
     String timeIn =
     presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
-
+    String fullDate = presence["time_in"];
+    DateTime fullDateTime = DateTime.parse(fullDate);
+    String dateNow = DateFormat('d MMM yy').format(fullDateTime);
+    // String timePresenceIn = presence["time_in"];
+    // DateTime fullTimeIn = DateTime.parse(timePresenceIn);
+    // String timeIn = DateFormat('hh:m:s').format(fullTimeIn);
+    // String timePresenceOut = presence["time_out"];
+    // DateTime fullTimeOut = DateTime.parse(timePresenceOut);
+    // String timeOut = DateFormat('hh:m:s').format(fullTimeOut);
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
-    return timeIn == "-" && timeOut == "-"
-        ? SizedBox()
-        : Column(
-      children: [
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
-          width: 329.w,
-          height: 74.h,
-          decoration: BoxDecoration(
-              color: white,
-              borderRadius: BorderRadius.circular(6.r),
-              border: Border.all(
-                color: grayBorder,
-                width: 1.w,
-              ),
-              boxShadow: [
-                BoxShadow(
-                    color: HexColor('#C9C9C9').withOpacity(0.10),
-                    offset: const Offset(0, 4),
-                    blurRadius: 6),
-              ]),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                width: 190.w,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Masuk",
-                                style: activityLabel,
-                              ),
-                              SizedBox(
-                                height: 4.h,
-                              ),
-                              Text(
-                                // hourFormatter(presence['time_in']).toString(),
-                                timeIn,
-                                style: activityTime,
-                              ),
-                            ],
-                          ),
-                        ],
+    bool checkStatus(String status){
+      return status == "0" || status == "3" || status == "4";
+    }
+
+    bool checkTimeStrip(String timeIn, String timeOut){
+      late bool isCheckTrue;
+      if(timeIn != "-" || timeOut != "-"){
+        isCheckTrue = true;
+      }else{
+        isCheckTrue = false;
+      }
+      return isCheckTrue;
+    }
+
+    return Container(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          if (checkStatus(statusFromPresence)) {
+            return Column(
+              children: [
+                Container(
+                  padding:
+                  EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
+                  width: 329.w,
+                  height: 74.h,
+                  decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(6.r),
+                      border: Border.all(
+                        color: grayBorder,
+                        width: 1.w,
                       ),
-                    SizedBox(
-                      width: 30.w,
-                    ),
-                    Container(
-                      width: 1.w,
-                      height: 30.h,
-                      color: grayUnselect,
-                    ),
-                    SizedBox(
-                      width: 30.w,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Keluar",
-                          style: activityLabel,
+                      boxShadow: [
+                        BoxShadow(
+                            color: HexColor('#C9C9C9').withOpacity(0.10),
+                            offset: const Offset(0, 4),
+                            blurRadius: 6),
+                      ]),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 190.w,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Masuk",
+                                  style: activityLabel,
+                                ),
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                                Text(
+                                  timeIn,
+                                  style: activityTime,
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              width: 30.w,
+                            ),
+                            Container(
+                              width: 1.w,
+                              height: 30.h,
+                              color: grayUnselect,
+                            ),
+                            SizedBox(
+                              width: 30.w,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Keluar",
+                                  style: activityLabel,
+                                ),
+                                SizedBox(
+                                  height: 4.h,
+                                ),
+                                Text(
+                                  timeOut,
+                                  style: activityTime,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 4.h,
-                        ),
-                        Text(
-                          // hourFormatter(presence['time_out']).toString(),
-                          timeOut,
-                          style: activityTime,
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      Text(
+                        dateNow,
+                        style: activityDateGray,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Text(
-                "07 Nov 22",
-                style: activityDateGray,
-              ),
-            ],
-          ),
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-      ],
+                SizedBox(
+                  height: 10.h,
+                ),
+              ],
+            );
+          } else {
+            return SizedBox();
+          }
+        },
+      ),
     );
   }
 }

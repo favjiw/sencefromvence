@@ -12,6 +12,8 @@ import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:lottie/lottie.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'dart:async';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -26,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
-  late String timeNow = DateFormat('yyyy-MM-dd hh:m:s').format(currentTime);
+  late String timeNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(currentTime);
   late String presenceMorningStart = yearNow + " 06:00:00";
   late String presenceMorningEnd = yearNow + " 07:00:00";
   late String presenceAfternoonStart = yearNow + " 14:00:00";
@@ -40,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late DateTime dayStart = DateTime.parse(morningStart);
   late DateTime dayEnd = DateTime.parse(morningEnd);
   String nis = "";
+  Timer? timer;
 
   MapController mapController = new MapController();
   late DatabaseReference dbRef;
@@ -48,6 +51,17 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     dbRef = FirebaseDatabase.instance.ref().child('presence');
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+      currentTime = DateTime.now();
+      timeNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(currentTime);
+      print(timeNow);
+    });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   Future<bool> hasPresence(String Id) async {
@@ -149,15 +163,15 @@ class _HomeScreenState extends State<HomeScreen> {
                           borderRadius: BorderRadius.circular(100.r),
                         ),
                         child: Center(
-                            child: Image.asset(
-                              'asset/images/img-profile.png',
-                              width: 26.w,
-                              height: 26.h,
-                              fit: BoxFit.cover,
-                            ),
+                          child: Image.asset(
+                            'asset/images/img-profile.png',
+                            width: 26.w,
+                            height: 26.h,
+                            fit: BoxFit.cover,
                           ),
+                        ),
                       ),
-                      ),
+                    ),
                   ],
                 ),
               ),
@@ -253,7 +267,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onPressed: () {
                                   mapController.validateUserLocation();
                                   print(mapController.isInSelectedArea);
-                                  if (mapController.isInSelectedArea == true) {
+                                  if (mapController.isInSelectedArea == true){
+                                    print("ayayay");
+                                    print(timeNow);
                                     dbRef.push().set({
                                       'reason': '',
                                       'status': '1',
@@ -466,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? FirebaseAnimatedList(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      query: dbPresence.limitToLast(5),
+                      query: dbPresence.orderByChild('status').limitToLast(5),
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {
                         Map presence = snapshot.value as Map;
@@ -476,7 +492,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           if (key == "student_id" &&
                               "${presence[key]}" == nis) {
                             validPresence = presence;
-                            print(validPresence);
                           }
                         });
                         // (snapshot.value as Map).forEach((key, val) {
@@ -525,82 +540,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  AwesomeDialog buildAwesomeDialogSuccessOutPresence(BuildContext context) {
-    return AwesomeDialog(
-      context: context,
-      dialogType: DialogType.success,
-      headerAnimationLoop: false,
-      animType: AnimType.bottomSlide,
-      title: 'Presensi Berhasil!',
-      titleTextStyle: popUpWarningTitle,
-      desc: 'Kamu sudah melakukan presensi keluar',
-      descTextStyle: popUpWarningDesc,
-      buttonsTextStyle: whiteOnBtnSmall,
-      buttonsBorderRadius: BorderRadius.circular(6.r),
-      btnOkColor: btnMain,
-      showCloseIcon: false,
-      btnOkText: 'Kembali',
-      btnOkOnPress: () {},
-    );
-  }
-
-  AwesomeDialog buildAwesomeDialogNotInArea(BuildContext context) {
-    return AwesomeDialog(
-      context: context,
-      dialogType: DialogType.warning,
-      headerAnimationLoop: false,
-      animType: AnimType.bottomSlide,
-      title: 'Warning',
-      titleTextStyle: popUpWarningTitle,
-      desc: 'Kamu tidak berada dalam area SMKN 4 Bandung',
-      descTextStyle: popUpWarningDesc,
-      buttonsTextStyle: whiteOnBtnSmall,
-      buttonsBorderRadius: BorderRadius.circular(6.r),
-      btnOkColor: btnMain,
-      showCloseIcon: false,
-      btnOkText: 'Kembali',
-      btnOkOnPress: () {},
-    );
-  }
-
-  AwesomeDialog buildAwesomeDialogSuccessInPresence(BuildContext context) {
-    return AwesomeDialog(
-      context: context,
-      dialogType: DialogType.success,
-      headerAnimationLoop: false,
-      animType: AnimType.bottomSlide,
-      title: 'Presensi Berhasil!',
-      titleTextStyle: popUpWarningTitle,
-      desc: 'Kamu sudah melakukan presensi masuk',
-      descTextStyle: popUpWarningDesc,
-      buttonsTextStyle: whiteOnBtnSmall,
-      buttonsBorderRadius: BorderRadius.circular(6.r),
-      btnOkColor: btnMain,
-      showCloseIcon: false,
-      btnOkText: 'Kembali',
-      btnOkOnPress: () {},
-    );
-  }
-
-  AwesomeDialog buildAwesomeDialogNotInTime(BuildContext context) {
-    return AwesomeDialog(
-      context: context,
-      dialogType: DialogType.error,
-      headerAnimationLoop: false,
-      animType: AnimType.bottomSlide,
-      title: 'Warning',
-      titleTextStyle: popUpWarningTitle,
-      desc: 'Kamu belum bisa presensi sekarang',
-      descTextStyle: popUpWarningDesc,
-      buttonsTextStyle: whiteOnBtnSmall,
-      buttonsBorderRadius: BorderRadius.circular(6.r),
-      btnOkColor: btnMain,
-      showCloseIcon: false,
-      btnOkText: 'Kembali',
-      btnOkOnPress: () {},
-    );
-  }
-
   Widget itemList({required presence}) {
     String timeIn =
         presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
@@ -616,9 +555,6 @@ class _HomeScreenState extends State<HomeScreen> {
     // String timePresenceOut = presence["time_out"];
     // DateTime fullTimeOut = DateTime.parse(timePresenceOut);
     // String timeOut = DateFormat('hh:m:s').format(fullTimeOut);
-    print(dateNow);
-    print(timeIn);
-    print(timeOut);
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
@@ -711,5 +647,81 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           );
+  }
+
+  AwesomeDialog buildAwesomeDialogSuccessOutPresence(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Presensi Berhasil!',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu sudah melakukan presensi keluar',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
+  }
+
+  AwesomeDialog buildAwesomeDialogNotInArea(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Warning',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu tidak berada dalam area SMKN 4 Bandung',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
+  }
+
+  AwesomeDialog buildAwesomeDialogSuccessInPresence(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Presensi Berhasil!',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu sudah melakukan presensi masuk',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
+  }
+
+  AwesomeDialog buildAwesomeDialogNotInTime(BuildContext context) {
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      headerAnimationLoop: false,
+      animType: AnimType.bottomSlide,
+      title: 'Warning',
+      titleTextStyle: popUpWarningTitle,
+      desc: 'Kamu belum bisa presensi sekarang',
+      descTextStyle: popUpWarningDesc,
+      buttonsTextStyle: whiteOnBtnSmall,
+      buttonsBorderRadius: BorderRadius.circular(6.r),
+      btnOkColor: btnMain,
+      showCloseIcon: false,
+      btnOkText: 'Kembali',
+      btnOkOnPress: () {},
+    );
   }
 }
