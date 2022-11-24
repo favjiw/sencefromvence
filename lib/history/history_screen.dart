@@ -449,7 +449,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SizedBox(
-                        width: 190.w,
+                        width: 195.w,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -464,14 +464,40 @@ class _HistoryScreenState extends State<HistoryScreen>
                                 SizedBox(
                                   height: 4.h,
                                 ),
-                                Text(
-                                  timeIn,
-                                  style: activityTime,
+                                Container(
+                                  child: LayoutBuilder(builder: (context, constraints){
+                                    if(presence["status"] == "0"){
+                                      return Row(
+                                        children: [
+                                          Text("unpresent", style: unpresent,),
+                                          Text("[A]", style: unpresentA,),
+                                        ],
+                                      );
+                                    }else if(presence["status"] == "3"){
+                                      return Row(
+                                        children: [
+                                          Text("unpresent", style: unpresent,),
+                                          Text("[S]", style: unpresentS,),
+                                        ],
+                                      );
+                                    }else{
+                                      return Row(
+                                        children: [
+                                          Text("unpresent", style: unpresent,),
+                                          Text("[I]", style: unpresentI,),
+                                        ],
+                                      );
+                                    }
+                                  }),
                                 ),
+                                // Text(
+                                //   timeIn,
+                                //   style: activityTime,
+                                // ),
                               ],
                             ),
                             SizedBox(
-                              width: 30.w,
+                              width: 10.w,
                             ),
                             Container(
                               width: 1.w,
@@ -479,7 +505,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                               color: grayUnselect,
                             ),
                             SizedBox(
-                              width: 30.w,
+                              width: 10.w,
                             ),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -491,9 +517,31 @@ class _HistoryScreenState extends State<HistoryScreen>
                                 SizedBox(
                                   height: 4.h,
                                 ),
-                                Text(
-                                  timeOut,
-                                  style: activityTime,
+                                Container(
+                                  child: LayoutBuilder(builder: (context, constraints){
+                                    if(presence["status"] == "0"){
+                                      return Row(
+                                        children: [
+                                          Text("unpresent", style: unpresent,),
+                                          Text("[A]", style: unpresentA,),
+                                        ],
+                                      );
+                                    }else if(presence["status"] == "3"){
+                                      return Row(
+                                        children: [
+                                          Text("unpresent", style: unpresent,),
+                                          Text("[S]", style: unpresentS,),
+                                        ],
+                                      );
+                                    }else{
+                                      return Row(
+                                        children: [
+                                          Text("unpresent", style: unpresent,),
+                                          Text("[I]", style: unpresentI,),
+                                        ],
+                                      );
+                                    }
+                                  }),
                                 ),
                               ],
                             ),

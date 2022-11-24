@@ -257,6 +257,24 @@ TextStyle unpresent = GoogleFonts.poppins(
   fontWeight: FontWeight.w300,
 );
 
+TextStyle unpresentA = GoogleFonts.poppins(
+  fontSize: 13.sp,
+  color: btnMain,
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle unpresentS = GoogleFonts.poppins(
+  fontSize: 13.sp,
+  color: red,
+  fontWeight: FontWeight.w400,
+);
+
+TextStyle unpresentI = GoogleFonts.poppins(
+  fontSize: 13.sp,
+  color: HexColor('#C6D800'),
+  fontWeight: FontWeight.w400,
+);
+
 TextStyle whiteOnBtn = GoogleFonts.poppins(
   fontSize: 18.sp,
   color: white,
@@ -352,6 +370,8 @@ TextStyle elseTitleHistory = GoogleFonts.poppins(
   color: HexColor('#474747'),
   fontWeight: FontWeight.w500,
 );
+
+
 
 
 

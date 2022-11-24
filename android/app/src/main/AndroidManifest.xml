@@ -6,7 +6,7 @@
    <application
         android:label="Sence"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic">
+        android:icon="@mipmap/ic_sence">
         <activity
             android:name=".MainActivity"
             android:exported="true"
