@@ -21,7 +21,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
   String reason = "sakit";
   String status = "3";
   late DateTime currentTime = DateTime.now();
-  late String timeNow = DateFormat('yyyy-MM-dd hh:m:ss').format(DateTime.now());
+  late String timeNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
   late String yearNow = DateFormat('yyyy-MM-dd').format(currentTime);
   late String timeReset = yearNow + " 00:00:00";
   int nis = 0;

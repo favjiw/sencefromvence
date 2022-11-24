@@ -14,7 +14,6 @@ import 'package:lottie/lottie.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -54,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
     timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
       currentTime = DateTime.now();
       timeNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(currentTime);
-      print(timeNow);
     });
   }
 
@@ -267,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onPressed: () {
                                   mapController.validateUserLocation();
                                   print(mapController.isInSelectedArea);
-                                  if (mapController.isInSelectedArea == true){
+                                  if (mapController.isInSelectedArea == true) {
                                     print("ayayay");
                                     print(timeNow);
                                     dbRef.push().set({
@@ -336,13 +334,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               child: TextButton(
                                 onPressed: () {
-                                  dbRef.push().set({
-                                    'reason': '',
-                                    'status': '1',
-                                    'student_id': nis,
-                                    'time_in': timeNow,
-                                    'time_out': '0',
-                                  });
                                   buildAwesomeDialogNotInTime(context).show();
                                 },
                                 style: TextButton.styleFrom(
@@ -482,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ? FirebaseAnimatedList(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      query: dbPresence.orderByChild('status').limitToLast(5),
+                      query: dbPresence.limitToLast(5),
                       itemBuilder: (BuildContext context, DataSnapshot snapshot,
                           Animation<double> animation, int index) {
                         Map presence = snapshot.value as Map;
@@ -590,6 +581,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
@@ -599,24 +591,65 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 4.h,
                               ),
-                              Text(
-                                timeIn,
-                                style: activityTime,
+                              Container(
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  if (presence["status"] == "0") {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "unpresent",
+                                          style: unpresent,
+                                        ),
+                                        Text(
+                                          "[A]",
+                                          style: unpresentA,
+                                        ),
+                                      ],
+                                    );
+                                  } else if (presence["status"] == "3") {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "unpresent",
+                                          style: unpresent,
+                                        ),
+                                        Text(
+                                          "[S]",
+                                          style: unpresentS,
+                                        ),
+                                      ],
+                                    );
+                                  } else if (presence["status"] == "4") {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "unpresent",
+                                          style: unpresent,
+                                        ),
+                                        Text(
+                                          "[I]",
+                                          style: unpresentI,
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Text(
+                                      timeIn,
+                                      style: activityTime,
+                                    );
+                                  }
+                                }),
                               ),
                             ],
-                          ),
-                          SizedBox(
-                            width: 30.w,
                           ),
                           Container(
                             width: 1.w,
                             height: 30.h,
                             color: grayUnselect,
                           ),
-                          SizedBox(
-                            width: 30.w,
-                          ),
                           Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
@@ -626,9 +659,55 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 height: 4.h,
                               ),
-                              Text(
-                                timeOut,
-                                style: activityTime,
+                              Container(
+                                child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                  if (presence["status"] == "0") {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "unpresent",
+                                          style: unpresent,
+                                        ),
+                                        Text(
+                                          "[A]",
+                                          style: unpresentA,
+                                        ),
+                                      ],
+                                    );
+                                  } else if (presence["status"] == "3") {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "unpresent",
+                                          style: unpresent,
+                                        ),
+                                        Text(
+                                          "[S]",
+                                          style: unpresentS,
+                                        ),
+                                      ],
+                                    );
+                                  } else if (presence["status"] == "4") {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "unpresent",
+                                          style: unpresent,
+                                        ),
+                                        Text(
+                                          "[I]",
+                                          style: unpresentI,
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Text(
+                                      timeOut,
+                                      style: activityTime,
+                                    );
+                                  }
+                                }),
                               ),
                             ],
                           ),
