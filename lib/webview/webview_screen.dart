@@ -20,9 +20,14 @@ class _WebViewScreenState extends State<WebViewScreen> {
     String w = "ef797c8118f02dfb649607dd5d3f8c7623048c9c063d532cc95c5ed7a898a64f";
     print("Redirecting to https://flask-facerec.herokuapp.com/login?id=$id&w=$w");
     return Scaffold(
-      body: WebView(
-        javascriptMode: JavascriptMode.unrestricted,
-        initialUrl: 'https://flask-facerec.herokuapp.com/login?id=$id&w=$w',
+      body: WillPopScope(
+        onWillPop: () async {
+          return true;
+        },
+        child: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          initialUrl: 'https://www.youtube.com/',
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
