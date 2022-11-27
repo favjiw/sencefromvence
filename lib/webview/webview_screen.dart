@@ -40,7 +40,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
     url = "$url?id=$id&w=$password";
 
-    return id != null ? Scaffold(
+    return id != null && password != null ? Scaffold(
       body: WillPopScope(
         onWillPop: () async {
           return true;
