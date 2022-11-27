@@ -207,7 +207,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   await SessionManager().containsKey("id") == true ? "true": "false"
                               }");
                               await SessionManager().set("user", nis);
-                              print(await SessionManager().get("user"));
+                              await SessionManager().set("pass", _hash(password));
+
                               Navigator.pushNamedAndRemoveUntil( context, '/nav-bar', (route) => false);
                               Navigator.pushReplacement(
                                   context,

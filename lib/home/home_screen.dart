@@ -537,9 +537,14 @@ class _HomeScreenState extends State<HomeScreen> {
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
-    String fullDate = presence["time_in"];
-    DateTime fullDateTime = DateTime.parse(fullDate);
-    String dateNow = DateFormat('d MMM yy').format(fullDateTime);
+    String dateNow;
+    if(presence["time_in"] != null) {
+      String fullDate = presence["time_in"];
+      DateTime fullDateTime = DateTime.parse(fullDate);
+      dateNow = DateFormat('d MMM yy').format(fullDateTime);
+    }else {
+      dateNow = "";
+    }
     // String timePresenceIn = presence["time_in"];
     // DateTime fullTimeIn = DateTime.parse(timePresenceIn);
     // String timeIn = DateFormat('hh:m:s').format(fullTimeIn);
