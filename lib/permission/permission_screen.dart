@@ -20,8 +20,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
   bool _isPermission = false;
   String reason = "sakit";
   String status = "3";
-  late DateTime currentTime = DateTime.now();
-  late String timeNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(DateTime.now());
+  late DateTime currentTime = DateTime.now().subtract(const Duration(hours: 7));
+  late String timeNow = DateFormat('yyyy-MM-dd HH:mm:ss').format(currentTime);
   late String yearNow = DateFormat('yyyy-MM-dd').format(currentTime);
   late String timeReset = yearNow + " 00:00:00";
   int nis = 0;

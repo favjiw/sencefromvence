@@ -534,11 +534,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget itemList({required presence}) {
-    // String timeIn =
-    //     presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
-    // String timeOut = presence["time_out"] != null
-    //     ? presence["time_out"].split(" ").last
-    //     : "-";
     String presenceIn = presence["time_in"] == null ? "0000-00-00 00:00:00" : presence["time_in"];
     String presenceOut = presence["time_Out"] == null ? "0000-00-00 00:00:00" : presence["time_Out"];
     String timeIn = "empty";
@@ -546,16 +541,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if(presenceIn != "0000-00-00 00:00:00"){
       DateTime timeInTime = DateTime.parse(presenceIn);
-      timeInTime = timeInTime.subtract(const Duration(hours: 7));
-      timeIn = DateFormat('hh:mm:ss').format(timeInTime);
+      timeInTime = timeInTime.add(const Duration(hours: 7));
+      timeIn = DateFormat('HH:mm:ss').format(timeInTime);
     }else{
       timeIn = "0";
     }
 
     if(presenceOut != "0000-00-00 00:00:00"){
       DateTime timeOutTime = DateTime.parse(presenceOut);
-      timeOutTime = timeOutTime.subtract(const Duration(hours: 7));
-      timeOut = DateFormat('hh:mm:ss').format(timeOutTime);
+      timeOutTime = timeOutTime.add(const Duration(hours: 7));
+      timeOut = DateFormat('HH:mm:ss').format(timeOutTime);
     }else{
       timeOut = "0";
     }
@@ -660,6 +655,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return Text(
                                       timeIn,
                                       style: activityTime,
+                                      textAlign: TextAlign.center,
                                     );
                                   }
                                 }),
