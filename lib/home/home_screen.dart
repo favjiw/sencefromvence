@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:sence_sence/controller.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:sence_sence/home/controller/maps_controller.dart';
@@ -43,6 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String nis = "";
   Timer? timer;
 
+  Controller _controller = new Controller();
   MapController mapController = new MapController();
   late DatabaseReference dbRef;
 
@@ -532,11 +534,32 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget itemList({required presence}) {
-    String timeIn =
-        presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
-    String timeOut = presence["time_out"] != null
-        ? presence["time_out"].split(" ").last
-        : "-";
+    // String timeIn =
+    //     presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
+    // String timeOut = presence["time_out"] != null
+    //     ? presence["time_out"].split(" ").last
+    //     : "-";
+    String presenceIn = presence["time_in"] == null ? "0000-00-00 00:00:00" : presence["time_in"];
+    String presenceOut = presence["time_Out"] == null ? "0000-00-00 00:00:00" : presence["time_Out"];
+    String timeIn = "empty";
+    String timeOut = "empty";
+
+    if(presenceIn != "0000-00-00 00:00:00"){
+      DateTime timeInTime = DateTime.parse(presenceIn);
+      timeInTime = timeInTime.subtract(const Duration(hours: 7));
+      timeIn = DateFormat('hh:mm:ss').format(timeInTime);
+    }else{
+      timeIn = "0";
+    }
+
+    if(presenceOut != "0000-00-00 00:00:00"){
+      DateTime timeOutTime = DateTime.parse(presenceOut);
+      timeOutTime = timeOutTime.subtract(const Duration(hours: 7));
+      timeOut = DateFormat('hh:mm:ss').format(timeOutTime);
+    }else{
+      timeOut = "0";
+    }
+
     String dateNow;
     if(presence["time_in"] != null) {
       String fullDate = presence["time_in"];
@@ -545,12 +568,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }else {
       dateNow = "";
     }
-    // String timePresenceIn = presence["time_in"];
-    // DateTime fullTimeIn = DateTime.parse(timePresenceIn);
-    // String timeIn = DateFormat('hh:m:s').format(fullTimeIn);
-    // String timePresenceOut = presence["time_out"];
-    // DateTime fullTimeOut = DateTime.parse(timePresenceOut);
-    // String timeOut = DateFormat('hh:m:s').format(fullTimeOut);
+
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
