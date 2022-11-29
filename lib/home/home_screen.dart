@@ -266,19 +266,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: TextButton(
                                 onPressed: () {
                                   mapController.validateUserLocation();
-                                  print(mapController.isInSelectedArea);
                                   if (mapController.isInSelectedArea == true) {
-                                    print("ayayay");
-                                    print(timeNow);
-                                    dbRef.push().set({
-                                      'reason': '',
-                                      'status': '1',
-                                      'student_id': nis,
-                                      'time_in': timeNow,
-                                      'time_out': '0',
-                                    });
-                                    buildAwesomeDialogSuccessInPresence(context)
-                                        .show();
+                                    Navigator.pushNamed(context, '/webview');
                                   } else {
                                     buildAwesomeDialogNotInArea(context).show();
                                   }
@@ -311,9 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onPressed: () {
                                   mapController.validateUserLocation();
                                   if (mapController.isInSelectedArea == true) {
-                                    buildAwesomeDialogSuccessOutPresence(
-                                            context)
-                                        .show();
+                                    Navigator.pushNamed(context, '/webview');
                                   } else {
                                     buildAwesomeDialogNotInArea(context).show();
                                   }

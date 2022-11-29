@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
@@ -19,6 +20,8 @@ class BotNavBar extends StatefulWidget {
 
 class _BotNavBarState extends State<BotNavBar> {
   int currentIndex = 0;
+  MapController mapController = new MapController();
+
 
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = HomeScreen();
@@ -39,25 +42,7 @@ class _BotNavBarState extends State<BotNavBar> {
           height: 35.h,
         ),
         onPressed: () {
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.infoReverse,
-            headerAnimationLoop: false,
-            animType: AnimType.bottomSlide,
-            title: 'Face Scan',
-            titleTextStyle: popUpWarningTitle,
-            desc: 'To Face Presence',
-            descTextStyle: popUpWarningDesc,
-            buttonsTextStyle: whiteOnBtnSmall,
-            buttonsBorderRadius: BorderRadius.circular(6.r),
-            btnOkColor: btnMain,
-            showCloseIcon: false,
-            btnOkText: 'Kembali',
-            btnOkOnPress: () {
-              print("Clicked");
-              Navigator.pushNamed(context, '/webview');
-            },
-          ).show();
+          Navigator.pushNamed(context, '/webview');
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
