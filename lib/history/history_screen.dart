@@ -254,7 +254,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 
   Widget itemListIsPresent({required presence}) {
-    String statusFromPresence = presence["status"];
+    int statusFromPresence = presence["status"];
     String timeIn =
         presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
     String timeOut = presence["time_out"] != null
@@ -272,8 +272,8 @@ class _HistoryScreenState extends State<HistoryScreen>
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
-    bool checkStatus(String status) {
-      return status == "1" || status == "2";
+    bool checkStatus(int status) {
+      return status == 1 || status == 2;
     }
 
     bool checkTimeStrip(String timeIn, String timeOut) {
@@ -388,7 +388,7 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 
   Widget itemListIsNotPresent({required presence}) {
-    String statusFromPresence = presence["status"];
+    int statusFromPresence = presence["status"];
     String timeIn =
         presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
     String timeOut = presence["time_out"] != null
@@ -406,8 +406,8 @@ class _HistoryScreenState extends State<HistoryScreen>
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
-    bool checkStatus(String status) {
-      return status == "0" || status == "3" || status == "4";
+    bool checkStatus(int status) {
+      return status == 0 || status == 3 || status == 4;
     }
 
     bool checkTimeStrip(String timeIn, String timeOut) {
