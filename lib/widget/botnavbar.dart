@@ -1,17 +1,13 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:sence_sence/webview/webview_screen.dart';
 
 class BotNavBar extends StatefulWidget {
-  // final String nis;
-  // final String password;
-  // const BotNavBar({Key? key, required this.nis, required this.password}) : super(key: key);
   const BotNavBar({Key? key}) : super(key: key);
 
 
@@ -27,10 +23,32 @@ class _BotNavBarState extends State<BotNavBar> {
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen = HomeScreen();
 
+  late int id;
+  late String password;
+
+  Future<int> fetchId() async {
+    return await SessionManager().get("user");
+  }
+
+  Future<String> fetchPassword() async {
+    return await SessionManager().get("pass");
+  }
+
   _BotNavBarState();
   @override
 
   Widget build(BuildContext context) {
+    fetchId().then((res) {
+      setState(() {
+        this.id = res;
+      });
+    });
+
+    fetchPassword().then((res) {
+      setState(() {
+        this.password = res;
+      });
+    });
     return Scaffold(
       body: PageStorage(
         bucket: bucket,
@@ -43,7 +61,12 @@ class _BotNavBarState extends State<BotNavBar> {
           height: 35.h,
         ),
         onPressed: () {
-          Navigator.pushNamed(context, '/webview');
+          // Navigator.pushNamed(context, '/webview');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WebViewScreen(nis: id, password: password,),
+              ));
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
