@@ -19,7 +19,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
   bool _isSick = true;
   bool _isPermission = false;
   String reason = "sakit";
-  String status = "3";
+  int status = 3;
   late DateTime currentTime = DateTime.now().subtract(const Duration(hours: 7));
   late String timeNow = DateFormat('yyyy-MM-dd HH:mm:ss').format(currentTime);
   late String yearNow = DateFormat('yyyy-MM-dd').format(currentTime);
@@ -79,8 +79,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                               _isSick = true;
                               _isPermission = false;
                               reason = "sakit";
-                              status = "3";
-                              print(_isSick);
+                              status = 3;
                             });
                           },
                           child: Column(
@@ -111,8 +110,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                               _isSick = false;
                               _isPermission = true;
                               reason = "izin";
-                              status = "4";
-                              print(_isSick);
+                              status = 4;
                             });
                           },
                           child: Column(

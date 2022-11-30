@@ -397,12 +397,6 @@ class _HistoryScreenState extends State<HistoryScreen>
     String fullDate = presence["time_in"];
     DateTime fullDateTime = DateTime.parse(fullDate);
     String dateNow = DateFormat('d MMM yy').format(fullDateTime);
-    // String timePresenceIn = presence["time_in"];
-    // DateTime fullTimeIn = DateTime.parse(timePresenceIn);
-    // String timeIn = DateFormat('hh:m:s').format(fullTimeIn);
-    // String timePresenceOut = presence["time_out"];
-    // DateTime fullTimeOut = DateTime.parse(timePresenceOut);
-    // String timeOut = DateFormat('hh:m:s').format(fullTimeOut);
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 

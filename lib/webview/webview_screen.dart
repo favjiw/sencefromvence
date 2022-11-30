@@ -8,7 +8,6 @@ class WebViewScreen extends StatefulWidget {
   final int nis;
   final String password;
   const WebViewScreen({Key? key, required this.nis, required this.password}) : super(key: key);
-  // const WebViewScreen({Key? key}) : super(key: key);
 
   @override
   State<WebViewScreen> createState() => _WebViewScreenState();
@@ -53,10 +52,6 @@ class _WebViewScreenState extends State<WebViewScreen> {
               onWillPop: () async {
                 return true;
               },
-              // child: WebView.WebView(
-              //   initialUrl: url,
-              //   javascriptMode: WebView.JavascriptMode.unrestricted,
-              // ),
               child: InAppWebView(
                 initialUrlRequest: URLRequest(
                   url: Uri.parse(url),
