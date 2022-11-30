@@ -6,13 +6,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:sence_sence/controller.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
 import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:lottie/lottie.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:async';
 
 class HomeScreen extends StatefulWidget {
@@ -44,7 +42,6 @@ class _HomeScreenState extends State<HomeScreen> {
   String nis = "";
   Timer? timer;
 
-  Controller _controller = new Controller();
   MapController mapController = new MapController();
   late DatabaseReference dbRef;
 
@@ -599,7 +596,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Container(
                                 child: LayoutBuilder(
                                     builder: (context, constraints) {
-                                  if (presence["status"] == "0") {
+                                  if (presence["status"] == 0) {
                                     return Row(
                                       children: [
                                         Text(
@@ -612,7 +609,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ],
                                     );
-                                  } else if (presence["status"] == "3") {
+                                  } else if (presence["status"] == 3) {
                                     return Row(
                                       children: [
                                         Text(
@@ -625,7 +622,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ],
                                     );
-                                  } else if (presence["status"] == "4") {
+                                  } else if (presence["status"] == 4) {
                                     return Row(
                                       children: [
                                         Text(
@@ -668,7 +665,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               Container(
                                 child: LayoutBuilder(
                                     builder: (context, constraints) {
-                                  if (presence["status"] == "0") {
+                                  if (presence["status"] == 0) {
                                     return Row(
                                       children: [
                                         Text(
@@ -681,7 +678,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ],
                                     );
-                                  } else if (presence["status"] == "3") {
+                                  } else if (presence["status"] == 3) {
                                     return Row(
                                       children: [
                                         Text(
@@ -694,7 +691,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                       ],
                                     );
-                                  } else if (presence["status"] == "4") {
+                                  } else if (presence["status"] == 4) {
                                     return Row(
                                       children: [
                                         Text(

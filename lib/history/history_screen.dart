@@ -255,20 +255,35 @@ class _HistoryScreenState extends State<HistoryScreen>
 
   Widget itemListIsPresent({required presence}) {
     int statusFromPresence = presence["status"];
-    String timeIn =
-        presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
-    String timeOut = presence["time_out"] != null
-        ? presence["time_out"].split(" ").last
-        : "-";
-    String fullDate = presence["time_in"];
-    DateTime fullDateTime = DateTime.parse(fullDate);
-    String dateNow = DateFormat('d MMM yy').format(fullDateTime);
-    // String timePresenceIn = presence["time_in"];
-    // DateTime fullTimeIn = DateTime.parse(timePresenceIn);
-    // String timeIn = DateFormat('hh:m:s').format(fullTimeIn);
-    // String timePresenceOut = presence["time_out"];
-    // DateTime fullTimeOut = DateTime.parse(timePresenceOut);
-    // String timeOut = DateFormat('hh:m:s').format(fullTimeOut);
+    String presenceIn = presence["time_in"] == null ? "0000-00-00 00:00:00" : presence["time_in"];
+    String presenceOut = presence["time_Out"] == null ? "0000-00-00 00:00:00" : presence["time_Out"];
+    String timeIn = "empty";
+    String timeOut = "empty";
+
+    if(presenceIn != "0000-00-00 00:00:00"){
+      DateTime timeInTime = DateTime.parse(presenceIn);
+      timeInTime = timeInTime.add(const Duration(hours: 7));
+      timeIn = DateFormat('HH:mm:ss').format(timeInTime);
+    }else{
+      timeIn = "0";
+    }
+
+    if(presenceOut != "0000-00-00 00:00:00"){
+      DateTime timeOutTime = DateTime.parse(presenceOut);
+      timeOutTime = timeOutTime.add(const Duration(hours: 7));
+      timeOut = DateFormat('HH:mm:ss').format(timeOutTime);
+    }else{
+      timeOut = "0";
+    }
+    String dateNow;
+    if(presence["time_in"] != null) {
+      String fullDate = presence["time_in"];
+      DateTime fullDateTime = DateTime.parse(fullDate);
+      dateNow = DateFormat('d MMM yy').format(fullDateTime);
+    }else {
+      dateNow = "";
+    }
+
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
 
@@ -404,16 +419,6 @@ class _HistoryScreenState extends State<HistoryScreen>
       return status == 0 || status == 3 || status == 4;
     }
 
-    bool checkTimeStrip(String timeIn, String timeOut) {
-      late bool isCheckTrue;
-      if (timeIn != "-" || timeOut != "-") {
-        isCheckTrue = true;
-      } else {
-        isCheckTrue = false;
-      }
-      return isCheckTrue;
-    }
-
     return Container(
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -460,14 +465,14 @@ class _HistoryScreenState extends State<HistoryScreen>
                                 ),
                                 Container(
                                   child: LayoutBuilder(builder: (context, constraints){
-                                    if(presence["status"] == "0"){
+                                    if(presence["status"] == 0){
                                       return Row(
                                         children: [
                                           Text("unpresent", style: unpresent,),
                                           Text("[A]", style: unpresentA,),
                                         ],
                                       );
-                                    }else if(presence["status"] == "3"){
+                                    }else if(presence["status"] == 3){
                                       return Row(
                                         children: [
                                           Text("unpresent", style: unpresent,),
@@ -513,14 +518,14 @@ class _HistoryScreenState extends State<HistoryScreen>
                                 ),
                                 Container(
                                   child: LayoutBuilder(builder: (context, constraints){
-                                    if(presence["status"] == "0"){
+                                    if(presence["status"] == 0){
                                       return Row(
                                         children: [
                                           Text("unpresent", style: unpresent,),
                                           Text("[A]", style: unpresentA,),
                                         ],
                                       );
-                                    }else if(presence["status"] == "3"){
+                                    }else if(presence["status"] == 3){
                                       return Row(
                                         children: [
                                           Text("unpresent", style: unpresent,),
