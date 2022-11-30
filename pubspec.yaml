@@ -51,6 +51,7 @@ dependencies:
   lottie: ^2.0.0
   webview_flutter: ^3.0.4
   flutter_launcher_icons: ^0.11.0
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:sence_sence/history/history_screen.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/login/login_screen.dart';
@@ -15,6 +16,10 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Permission.camera.request();
+  await Permission.audio.request();
+  await Permission.videos.request();
+  await Permission.microphone.request();
   runApp(const SenceApp());
 }
 

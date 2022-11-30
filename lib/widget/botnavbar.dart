@@ -5,6 +5,7 @@ import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class BotNavBar extends StatefulWidget {
