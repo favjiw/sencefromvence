@@ -519,7 +519,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget itemList({required presence}) {
     String presenceIn = presence["time_in"] == null ? "0000-00-00 00:00:00" : presence["time_in"];
-    String presenceOut = presence["time_Out"] == null ? "0000-00-00 00:00:00" : presence["time_Out"];
+    String presenceOut = presence["time_out"] == null ? "0000-00-00 00:00:00" : presence["time_out"];
     String timeIn = "empty";
     String timeOut = "empty";
 

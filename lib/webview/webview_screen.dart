@@ -46,6 +46,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
     url = "$url?id=$nis&w=$password2";
 
+    print("Redirecting to $url");
     return nis != null && password2 != null
         ? Scaffold(
             body: WillPopScope(
