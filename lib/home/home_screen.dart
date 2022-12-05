@@ -492,60 +492,60 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              // hasPresence(nis) != false
-              //     ? FirebaseAnimatedList(
-              //         shrinkWrap: true,
-              //         physics: NeverScrollableScrollPhysics(),
-              //         query: dbPresence.limitToLast(5),
-              //         itemBuilder: (BuildContext context, DataSnapshot snapshot,
-              //             Animation<double> animation, int index) {
-              //           Map presence = snapshot.value as Map;
-              //           Map validPresence = {};
-              //
-              //           presence.forEach((key, val) {
-              //             if (key == "student_id" &&
-              //                 "${presence[key]}" == nis) {
-              //               validPresence = presence;
-              //             }
-              //           });
-              //           // (snapshot.value as Map).forEach((key, val) {
-              //           //   print(presence.know)
-              //           // });
-              //
-              //           presence['key'] = snapshot.key;
-              //           validPresence['key'] = snapshot.key;
-              //           // print(presence['time_in']);
-              //           return itemList(presence: validPresence);
-              //         })
-              //     : Row(
-              //         crossAxisAlignment: CrossAxisAlignment.start,
-              //         children: [
-              //           Container(
-              //             child: Lottie.asset(
-              //               'asset/images/93134-not-found.json',
-              //               width: 140.w,
-              //               fit: BoxFit.cover,
-              //               repeat: true,
-              //             ),
-              //           ),
-              //           Column(
-              //             crossAxisAlignment: CrossAxisAlignment.start,
-              //             children: [
-              //               Text(
-              //                 "Wah, Presensi\nkamu masih kosong",
-              //                 style: elseTitle,
-              //               ),
-              //               SizedBox(
-              //                 height: 5.h,
-              //               ),
-              //               Text(
-              //                 "Yuk, kita hadir\ndi sekolah tepat waktu",
-              //                 style: elseDesc,
-              //               ),
-              //             ],
-              //           ),
-              //         ],
-              //       ),
+              hasPresence(nis) != false
+                  ? FirebaseAnimatedList(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      query: dbPresence.limitToLast(5),
+                      itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                          Animation<double> animation, int index) {
+                        Map presence = snapshot.value as Map;
+                        Map validPresence = {};
+
+                        presence.forEach((key, val) {
+                          if (key == "student_id" &&
+                              "${presence[key]}" == nis) {
+                            validPresence = presence;
+                          }
+                        });
+                        // (snapshot.value as Map).forEach((key, val) {
+                        //   print(presence.know)
+                        // });
+
+                        presence['key'] = snapshot.key;
+                        validPresence['key'] = snapshot.key;
+                        // print(presence['time_in']);
+                        return itemList(presence: validPresence);
+                      })
+                  : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Lottie.asset(
+                            'asset/images/93134-not-found.json',
+                            width: 140.w,
+                            fit: BoxFit.cover,
+                            repeat: true,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Wah, Presensi\nkamu masih kosong",
+                              style: elseTitle,
+                            ),
+                            SizedBox(
+                              height: 5.h,
+                            ),
+                            Text(
+                              "Yuk, kita hadir\ndi sekolah tepat waktu",
+                              style: elseDesc,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
             ],
           ),
         ),
