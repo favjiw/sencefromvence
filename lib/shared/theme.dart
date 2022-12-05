@@ -371,6 +371,12 @@ TextStyle elseTitleHistory = GoogleFonts.poppins(
   fontWeight: FontWeight.w500,
 );
 
+TextStyle homeCategoryTitle = GoogleFonts.poppins(
+  fontSize: 10.sp,
+  fontWeight: FontWeight.w500,
+  color: Colors.black,
+);
+
 
 
 

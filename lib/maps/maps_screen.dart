@@ -74,6 +74,18 @@ class _MapsScreenState extends State<MapsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: neutral,
+      appBar: AppBar(
+        backgroundColor: white,
+        centerTitle: true,
+        title: Text("Lokasi", style: appBarTitle,),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black,),
+        ),
+      ),
       body: Container(
         child: SafeArea(
           // on below line creating google maps
@@ -105,7 +117,7 @@ class _MapsScreenState extends State<MapsScreen> {
         ),
       ),
       // on pressing floating action button the camera will take to user current location
-      floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           getUserCurrentLocation().then((value) async {
@@ -149,7 +161,7 @@ class _MapsScreenState extends State<MapsScreen> {
             print("");
           }
         },
-        child: Icon(Icons.local_activity),
+        child: Icon(Icons.location_history_rounded),
       ),
     );
   }

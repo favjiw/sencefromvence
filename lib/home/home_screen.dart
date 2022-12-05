@@ -338,97 +338,134 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+              // SizedBox(
+              //   height: 13.h,
+              // ),
+              // Padding(
+              //   padding: EdgeInsets.only(left: 7.w),
+              //   child: Text(
+              //     "Jl. Kliningan No.6, Turangga, Kecamatan Lengkong, Kota Bandung, Jawa Barat",
+              //     style: addressHome,
+              //   ),
+              // ),
               SizedBox(
-                height: 13.h,
+                height: 20.h,
               ),
               Padding(
-                padding: EdgeInsets.only(left: 7.w),
-                child: Text(
-                  "Jl. Kliningan No.6, Turangga, Kecamatan Lengkong, Kota Bandung, Jawa Barat",
-                  style: addressHome,
-                ),
-              ),
-              SizedBox(
-                height: 13.h,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 153.w,
-                    height: 65.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          offset: Offset(0, 4),
-                          blurRadius: 6,
-                        ),
-                      ],
-                    ),
-                    child: TextButton(
+                padding: EdgeInsets.symmetric(horizontal: 6.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/history');
                       },
-                      style: TextButton.styleFrom(
-                        backgroundColor: white,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        padding: EdgeInsets.zero,
+                        elevation: 0,
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Lihat Riwayat",
-                            style: btnItemPageHome,
-                          ),
-                          Image.asset(
-                            "asset/images/arrow-right-ic.png",
-                            width: 24.w,
-                            height: 24.h,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 153.w,
-                    height: 65.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6.r),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          offset: Offset(0, 4),
-                          blurRadius: 6,
+                      child: Container(
+                        width: 76.w,
+                        height: 76.h,
+                        decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(6.r),
+                            border: Border.all(
+                              color: grayBorder,
+                              width: 1.w,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: HexColor('#C9C9C9').withOpacity(0.10),
+                                  offset: const Offset(0, 4),
+                                  blurRadius: 6),
+                            ]),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("asset/images/history-ic.png", width: 39.w, height: 39.h,),
+                            SizedBox(height: 5.h),
+                            Text("Riwayat", style: homeCategoryTitle,),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                    child: TextButton(
+                    ElevatedButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/permission');
                       },
-                      style: TextButton.styleFrom(
-                        backgroundColor: white,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        padding: EdgeInsets.zero,
+                        elevation: 0,
                       ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Ajukan Izin",
-                            style: btnItemPageHome,
-                          ),
-                          Image.asset(
-                            "asset/images/arrow-right-ic.png",
-                            width: 24.w,
-                            height: 24.h,
-                          ),
-                        ],
+                      child: Container(
+                        width: 76.w,
+                        height: 76.h,
+                        decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(6.r),
+                            border: Border.all(
+                              color: grayBorder,
+                              width: 1.w,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: HexColor('#C9C9C9').withOpacity(0.10),
+                                  offset: const Offset(0, 4),
+                                  blurRadius: 6),
+                            ]),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("asset/images/sick-ic.png", width: 39.w, height: 39.h,),
+                            SizedBox(height: 5.h),
+                            Text("Ajukan Izin", style: homeCategoryTitle,),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/maps');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        padding: EdgeInsets.zero,
+                        elevation: 0,
+                      ),
+                      child: Container(
+                        width: 76.w,
+                        height: 76.h,
+                        decoration: BoxDecoration(
+                            color: white,
+                            borderRadius: BorderRadius.circular(6.r),
+                            border: Border.all(
+                              color: grayBorder,
+                              width: 1.w,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                  color: HexColor('#C9C9C9').withOpacity(0.10),
+                                  offset: const Offset(0, 4),
+                                  blurRadius: 6),
+                            ]),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset("asset/images/map-ic.png", width: 39.w, height: 39.h,),
+                            SizedBox(height: 5.h),
+                            Text("Lokasi", style: homeCategoryTitle,),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 13.h,
@@ -455,60 +492,60 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              hasPresence(nis) != false
-                  ? FirebaseAnimatedList(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      query: dbPresence.limitToLast(5),
-                      itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                          Animation<double> animation, int index) {
-                        Map presence = snapshot.value as Map;
-                        Map validPresence = {};
-
-                        presence.forEach((key, val) {
-                          if (key == "student_id" &&
-                              "${presence[key]}" == nis) {
-                            validPresence = presence;
-                          }
-                        });
-                        // (snapshot.value as Map).forEach((key, val) {
-                        //   print(presence.know)
-                        // });
-
-                        presence['key'] = snapshot.key;
-                        validPresence['key'] = snapshot.key;
-                        // print(presence['time_in']);
-                        return itemList(presence: validPresence);
-                      })
-                  : Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: Lottie.asset(
-                            'asset/images/93134-not-found.json',
-                            width: 140.w,
-                            fit: BoxFit.cover,
-                            repeat: true,
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Wah, Presensi\nkamu masih kosong",
-                              style: elseTitle,
-                            ),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            Text(
-                              "Yuk, kita hadir\ndi sekolah tepat waktu",
-                              style: elseDesc,
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+              // hasPresence(nis) != false
+              //     ? FirebaseAnimatedList(
+              //         shrinkWrap: true,
+              //         physics: NeverScrollableScrollPhysics(),
+              //         query: dbPresence.limitToLast(5),
+              //         itemBuilder: (BuildContext context, DataSnapshot snapshot,
+              //             Animation<double> animation, int index) {
+              //           Map presence = snapshot.value as Map;
+              //           Map validPresence = {};
+              //
+              //           presence.forEach((key, val) {
+              //             if (key == "student_id" &&
+              //                 "${presence[key]}" == nis) {
+              //               validPresence = presence;
+              //             }
+              //           });
+              //           // (snapshot.value as Map).forEach((key, val) {
+              //           //   print(presence.know)
+              //           // });
+              //
+              //           presence['key'] = snapshot.key;
+              //           validPresence['key'] = snapshot.key;
+              //           // print(presence['time_in']);
+              //           return itemList(presence: validPresence);
+              //         })
+              //     : Row(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Container(
+              //             child: Lottie.asset(
+              //               'asset/images/93134-not-found.json',
+              //               width: 140.w,
+              //               fit: BoxFit.cover,
+              //               repeat: true,
+              //             ),
+              //           ),
+              //           Column(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             children: [
+              //               Text(
+              //                 "Wah, Presensi\nkamu masih kosong",
+              //                 style: elseTitle,
+              //               ),
+              //               SizedBox(
+              //                 height: 5.h,
+              //               ),
+              //               Text(
+              //                 "Yuk, kita hadir\ndi sekolah tepat waktu",
+              //                 style: elseDesc,
+              //               ),
+              //             ],
+              //           ),
+              //         ],
+              //       ),
             ],
           ),
         ),
@@ -518,33 +555,37 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget itemList({required presence}) {
-    String presenceIn = presence["time_in"] == null ? "0000-00-00 00:00:00" : presence["time_in"];
-    String presenceOut = presence["time_out"] == null ? "0000-00-00 00:00:00" : presence["time_out"];
+    String presenceIn = presence["time_in"] == null
+        ? "0000-00-00 00:00:00"
+        : presence["time_in"];
+    String presenceOut = presence["time_out"] == null
+        ? "0000-00-00 00:00:00"
+        : presence["time_out"];
     String timeIn = "empty";
     String timeOut = "empty";
 
-    if(presenceIn != "0000-00-00 00:00:00"){
+    if (presenceIn != "0000-00-00 00:00:00") {
       DateTime timeInTime = DateTime.parse(presenceIn);
       timeInTime = timeInTime.add(const Duration(hours: 7));
       timeIn = DateFormat('HH:mm:ss').format(timeInTime);
-    }else{
+    } else {
       timeIn = "0";
     }
 
-    if(presenceOut != "0000-00-00 00:00:00"){
+    if (presenceOut != "0000-00-00 00:00:00") {
       DateTime timeOutTime = DateTime.parse(presenceOut);
       timeOutTime = timeOutTime.add(const Duration(hours: 7));
       timeOut = DateFormat('HH:mm:ss').format(timeOutTime);
-    }else{
+    } else {
       timeOut = "0";
     }
 
     String dateNow;
-    if(presence["time_in"] != null) {
+    if (presence["time_in"] != null) {
       String fullDate = presence["time_in"];
       DateTime fullDateTime = DateTime.parse(fullDate);
       dateNow = DateFormat('d MMM yy').format(fullDateTime);
-    }else {
+    } else {
       dateNow = "";
     }
 
