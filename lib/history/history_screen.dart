@@ -133,118 +133,69 @@ class _HistoryScreenState extends State<HistoryScreen>
             child: TabBarView(
               controller: tabController,
               children: [
-                hasPresence(nis) != false
-                    ? SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 20.h),
-                            FirebaseAnimatedList(
-                                shrinkWrap: true,
-                                physics: ScrollPhysics(),
-                                query: dbPresence,
-                                itemBuilder: (BuildContext context,
-                                    DataSnapshot snapshot,
-                                    Animation<double> animation,
-                                    int index) {
-                                  Map presence = snapshot.value as Map;
-                                  Map validPresence = {};
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20.h),
+                      FirebaseAnimatedList(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          query: dbPresence,
+                          itemBuilder: (BuildContext context,
+                              DataSnapshot snapshot,
+                              Animation<double> animation,
+                              int index) {
+                            Map presence = snapshot.value as Map;
+                            Map validPresence = {};
 
-                                  presence.forEach((key, val) {
-                                    if (key == "student_id" &&
-                                        "${presence[key]}" == nis) {
-                                      validPresence = presence;
-                                    }
-                                  });
-                                  // (snapshot.value as Map).forEach((key, val) {
-                                  //   print(presence.know)
-                                  // });
+                            presence.forEach((key, val) {
+                              if (key == "student_id" &&
+                                  "${presence[key]}" == nis) {
+                                validPresence = presence;
+                              }
+                            });
+                            // (snapshot.value as Map).forEach((key, val) {
+                            //   print(presence.know)
+                            // });
 
-                                  presence['key'] = snapshot.key;
-                                  validPresence['key'] = snapshot.key;
-                                  // print(presence['time_in']);
-                                  return itemListIsPresent(
-                                      presence: validPresence);
-                                }),
-                          ],
-                        ),
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset(
-                            'asset/images/93134-not-found.json',
-                            width: 140.w,
-                            height: 140.h,
-                            fit: BoxFit.cover,
-                            repeat: true,
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Text(
-                            "Wah, Presensi\nkamu masih kosong",
-                            style: elseTitleHistory,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                hasPresence(nis) != false
-                    ? SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            SizedBox(height: 20.h),
-                            FirebaseAnimatedList(
-                                shrinkWrap: true,
-                                physics: ScrollPhysics(),
-                                query: dbPresence,
-                                itemBuilder: (BuildContext context,
-                                    DataSnapshot snapshot,
-                                    Animation<double> animation,
-                                    int index) {
-                                  Map presence = snapshot.value as Map;
-                                  Map validPresence = {};
+                            presence['key'] = snapshot.key;
+                            validPresence['key'] = snapshot.key;
+                            // print(presence['time_in']);
+                            return itemListIsPresent(presence: validPresence);
+                          }),
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20.h),
+                      FirebaseAnimatedList(
+                          shrinkWrap: true,
+                          physics: ScrollPhysics(),
+                          query: dbPresence,
+                          itemBuilder: (BuildContext context,
+                              DataSnapshot snapshot,
+                              Animation<double> animation,
+                              int index) {
+                            Map presence = snapshot.value as Map;
+                            Map validPresence = {};
 
-                                  presence.forEach((key, val) {
-                                    if (key == "student_id" &&
-                                        "${presence[key]}" == nis) {
-                                      validPresence = presence;
-                                    }
-                                  });
-                                  // (snapshot.value as Map).forEach((key, val) {
-                                  //   print(presence.know)
-                                  // });
+                            presence.forEach((key, val) {
+                              if (key == "student_id" &&
+                                  "${presence[key]}" == nis) {
+                                validPresence = presence;
+                              }
+                            });
 
-                                  presence['key'] = snapshot.key;
-                                  validPresence['key'] = snapshot.key;
-                                  // print(presence['time_in']);
-                                  return itemListIsNotPresent(
-                                      presence: validPresence);
-                                }),
-                          ],
-                        ),
-                      )
-                    : Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Lottie.asset(
-                            'asset/images/93134-not-found.json',
-                            width: 140.w,
-                            height: 140.h,
-                            fit: BoxFit.cover,
-                            repeat: true,
-                          ),
-                          SizedBox(
-                            height: 15.h,
-                          ),
-                          Text(
-                            "Wah, Presensi\nkamu masih kosong",
-                            style: elseTitleHistory,
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+                            presence['key'] = snapshot.key;
+                            validPresence['key'] = snapshot.key;
+                            return itemListIsNotPresent(
+                                presence: validPresence);
+                          }),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -254,33 +205,37 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 
   Widget itemListIsPresent({required presence}) {
-    int statusFromPresence = presence["status"];
-    String presenceIn = presence["time_in"] == null ? "0000-00-00 00:00:00" : presence["time_in"];
-    String presenceOut = presence["time_Out"] == null ? "0000-00-00 00:00:00" : presence["time_Out"];
+    // int statusFromPresence = presence["status"];
+    String presenceIn = presence["time_in"] == null
+        ? "0000-00-00 00:00:00"
+        : presence["time_in"];
+    String presenceOut = presence["time_Out"] == null
+        ? "0000-00-00 00:00:00"
+        : presence["time_Out"];
     String timeIn = "empty";
     String timeOut = "empty";
 
-    if(presenceIn != "0000-00-00 00:00:00"){
+    if (presenceIn != "0000-00-00 00:00:00") {
       DateTime timeInTime = DateTime.parse(presenceIn);
       timeInTime = timeInTime.add(const Duration(hours: 7));
       timeIn = DateFormat('HH:mm:ss').format(timeInTime);
-    }else{
+    } else {
       timeIn = "0";
     }
 
-    if(presenceOut != "0000-00-00 00:00:00"){
+    if (presenceOut != "0000-00-00 00:00:00") {
       DateTime timeOutTime = DateTime.parse(presenceOut);
       timeOutTime = timeOutTime.add(const Duration(hours: 7));
       timeOut = DateFormat('HH:mm:ss').format(timeOutTime);
-    }else{
+    } else {
       timeOut = "0";
     }
     String dateNow;
-    if(presence["time_in"] != null) {
-      String fullDate = presence["time_in"];
-      DateTime fullDateTime = DateTime.parse(fullDate);
+    if (presence["time_in"] != null) {
+      String? fullDate = presence["time_in"];
+      DateTime fullDateTime = DateTime.parse(fullDate!);
       dateNow = DateFormat('d MMM yy').format(fullDateTime);
-    }else {
+    } else {
       dateNow = "";
     }
 
@@ -301,12 +256,7 @@ class _HistoryScreenState extends State<HistoryScreen>
       return isCheckTrue;
     }
 
-    return Container(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          if (checkStatus(statusFromPresence) &&
-              checkTimeStrip(timeIn, timeOut)) {
-            return Column(
+    return Column(
               children: [
                 Container(
                   padding:
@@ -394,23 +344,18 @@ class _HistoryScreenState extends State<HistoryScreen>
                 ),
               ],
             );
-          } else {
-            return SizedBox();
-          }
-        },
-      ),
-    );
+
   }
 
   Widget itemListIsNotPresent({required presence}) {
-    int statusFromPresence = presence["status"];
+    // int statusFromPresence = presence["status"];
     String timeIn =
         presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
-    String fullDate = presence["time_in"];
-    DateTime fullDateTime = DateTime.parse(fullDate);
+    String? fullDate = presence["time_in"];
+    DateTime fullDateTime = DateTime.parse(fullDate!);
     String dateNow = DateFormat('d MMM yy').format(fullDateTime);
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";
@@ -419,151 +364,172 @@ class _HistoryScreenState extends State<HistoryScreen>
       return status == 0 || status == 3 || status == 4;
     }
 
-    return Container(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          if (checkStatus(statusFromPresence)) {
-            return Column(
-              children: [
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
-                  width: 329.w,
-                  height: 74.h,
-                  decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(6.r),
-                      border: Border.all(
-                        color: grayBorder,
-                        width: 1.w,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                            color: HexColor('#C9C9C9').withOpacity(0.10),
-                            offset: const Offset(0, 4),
-                            blurRadius: 6),
-                      ]),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 195.w,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Masuk",
-                                  style: activityLabel,
-                                ),
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                                Container(
-                                  child: LayoutBuilder(builder: (context, constraints){
-                                    if(presence["status"] == 0){
-                                      return Row(
-                                        children: [
-                                          Text("unpresent", style: unpresent,),
-                                          Text("[A]", style: unpresentA,),
-                                        ],
-                                      );
-                                    }else if(presence["status"] == 3){
-                                      return Row(
-                                        children: [
-                                          Text("unpresent", style: unpresent,),
-                                          Text("[S]", style: unpresentS,),
-                                        ],
-                                      );
-                                    }else{
-                                      return Row(
-                                        children: [
-                                          Text("unpresent", style: unpresent,),
-                                          Text("[I]", style: unpresentI,),
-                                        ],
-                                      );
-                                    }
-                                  }),
-                                ),
-                                // Text(
-                                //   timeIn,
-                                //   style: activityTime,
-                                // ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Container(
-                              width: 1.w,
-                              height: 30.h,
-                              color: grayUnselect,
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Keluar",
-                                  style: activityLabel,
-                                ),
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                                Container(
-                                  child: LayoutBuilder(builder: (context, constraints){
-                                    if(presence["status"] == 0){
-                                      return Row(
-                                        children: [
-                                          Text("unpresent", style: unpresent,),
-                                          Text("[A]", style: unpresentA,),
-                                        ],
-                                      );
-                                    }else if(presence["status"] == 3){
-                                      return Row(
-                                        children: [
-                                          Text("unpresent", style: unpresent,),
-                                          Text("[S]", style: unpresentS,),
-                                        ],
-                                      );
-                                    }else{
-                                      return Row(
-                                        children: [
-                                          Text("unpresent", style: unpresent,),
-                                          Text("[I]", style: unpresentI,),
-                                        ],
-                                      );
-                                    }
-                                  }),
-                                ),
-                              ],
-                            ),
-                          ],
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
+          width: 329.w,
+          height: 74.h,
+          decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.circular(6.r),
+              border: Border.all(
+                color: grayBorder,
+                width: 1.w,
+              ),
+              boxShadow: [
+                BoxShadow(
+                    color: HexColor('#C9C9C9').withOpacity(0.10),
+                    offset: const Offset(0, 4),
+                    blurRadius: 6),
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 195.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Masuk",
+                          style: activityLabel,
                         ),
-                      ),
-                      Text(
-                        dateNow,
-                        style: activityDateGray,
-                      ),
-                    ],
-                  ),
+                        SizedBox(
+                          height: 4.h,
+                        ),
+                        Container(
+                          child: LayoutBuilder(builder: (context, constraints) {
+                            if (presence["status"] == 0) {
+                              return Row(
+                                children: [
+                                  Text(
+                                    "unpresent",
+                                    style: unpresent,
+                                  ),
+                                  Text(
+                                    "[A]",
+                                    style: unpresentA,
+                                  ),
+                                ],
+                              );
+                            } else if (presence["status"] == 3) {
+                              return Row(
+                                children: [
+                                  Text(
+                                    "unpresent",
+                                    style: unpresent,
+                                  ),
+                                  Text(
+                                    "[S]",
+                                    style: unpresentS,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Row(
+                                children: [
+                                  Text(
+                                    "unpresent",
+                                    style: unpresent,
+                                  ),
+                                  Text(
+                                    "[I]",
+                                    style: unpresentI,
+                                  ),
+                                ],
+                              );
+                            }
+                          }),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Container(
+                      width: 1.w,
+                      height: 30.h,
+                      color: grayUnselect,
+                    ),
+                    SizedBox(
+                      width: 10.w,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Keluar",
+                          style: activityLabel,
+                        ),
+                        SizedBox(
+                          height: 4.h,
+                        ),
+                        Container(
+                          child: LayoutBuilder(builder: (context, constraints) {
+                            if (presence["status"] == 0) {
+                              return Row(
+                                children: [
+                                  Text(
+                                    "unpresent",
+                                    style: unpresent,
+                                  ),
+                                  Text(
+                                    "[A]",
+                                    style: unpresentA,
+                                  ),
+                                ],
+                              );
+                            } else if (presence["status"] == 3) {
+                              return Row(
+                                children: [
+                                  Text(
+                                    "unpresent",
+                                    style: unpresent,
+                                  ),
+                                  Text(
+                                    "[S]",
+                                    style: unpresentS,
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Row(
+                                children: [
+                                  Text(
+                                    "unpresent",
+                                    style: unpresent,
+                                  ),
+                                  Text(
+                                    "[I]",
+                                    style: unpresentI,
+                                  ),
+                                ],
+                              );
+                            }
+                          }),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 10.h,
-                ),
-              ],
-            );
-          } else {
-            return SizedBox();
-          }
-        },
-      ),
+              ),
+              Text(
+                dateNow,
+                style: activityDateGray,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+      ],
     );
   }
 }

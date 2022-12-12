@@ -377,6 +377,12 @@ TextStyle homeCategoryTitle = GoogleFonts.poppins(
   color: Colors.black,
 );
 
+TextStyle homeLate = GoogleFonts.poppins(
+  fontSize: 13.sp,
+  fontWeight: FontWeight.w500,
+  color: white,
+);
+
 
 
 

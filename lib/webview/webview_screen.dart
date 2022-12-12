@@ -15,7 +15,7 @@ class WebViewScreen extends StatefulWidget {
 
 class _WebViewScreenState extends State<WebViewScreen> {
   late InAppWebViewController _webViewController;
-  String url = "https://flask-facerec.herokuapp.com/login";
+  String url = "https://cautious-sniffle-production.up.railway.app/face/recognizer?expected=";
 
   late int id;
   late String password;
@@ -44,7 +44,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
     int nis = widget.nis;
     String password2 = widget.password;
 
-    url = "$url?id=$nis&w=$password2";
+    url = "$url$nis";
 
     print("Redirecting to $url");
     return nis != null && password2 != null

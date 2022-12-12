@@ -22,6 +22,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   Query dbPresence = FirebaseDatabase.instance.ref().child('presence');
+  Query refStudent = FirebaseDatabase.instance.ref().child('users');
+  var studentRef = FirebaseDatabase.instance.ref('users');
+  // DatabaseReference refName =  FirebaseDatabase.instance.ref('users/-NH2Qg94bIZbqyLZMveS/').child("name");
+  Query refName = FirebaseDatabase.instance.ref('users/-NH2Qg94bIZbqyLZMveS/').child("id");
 
   late bool canPresent;
   late DateTime currentTime = DateTime.now();
@@ -41,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late DateTime dayEnd = DateTime.parse(morningEnd);
   String nis = "";
   Timer? timer;
+  String name = "siapa";
 
   MapController mapController = new MapController();
   late DatabaseReference dbRef;
@@ -106,11 +111,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return await SessionManager().get("user");
   }
 
+  Future<String> getName() async {
+    DatabaseReference refName2 = FirebaseDatabase.instance.ref('users').child('-NH2Qg94bIZbqyLZMveS').child('name');
+    DatabaseEvent event = await refName2.once();
+    String name = event.snapshot.value.toString();
+    return name;
+  }
+
   @override
   Widget build(BuildContext context) {
+
     asyncNIS().then((value) {
       setState(() {
         this.nis = '$value';
+      });
+    });
+
+    getName().then((value){
+      setState(() {
+        this.name = value;
       });
     });
 
@@ -139,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: HomeTitle,
                         ),
                         Text(
-                          nis,
+                          name,
                           style: HomeTitle,
                         ),
                       ],
@@ -224,9 +243,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: Center(
                               child: Image.asset(
-                                'asset/images/hourglass.png',
-                                width: 13.w,
-                                height: 21.h,
+                                'asset/images/deadline-ic.png',
+                                width: 23.w,
+                                height: 23.h,
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -238,6 +257,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             statusTime() == true ? '07:00' : '16:00',
                             style: HomeTimeWhite,
                           ),
+                          Container(
+                            child: LayoutBuilder(builder: (context, constraints){
+                              if (currentTime.isAfter(presenceInStart) &&
+                                  currentTime.isBefore(presenceOutStart)){
+                                return Text("(telat)", style: homeLate,);
+                              }else{
+                                return SizedBox();
+                              }
+                            }),
+                          )
                         ],
                       ),
                       SizedBox(
@@ -278,7 +307,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             );
-                          } else if (currentTime.isAfter(presenceOutStart) &&
+                          } else if (currentTime.isAfter(presenceInEnd) && currentTime.isBefore(presenceOutStart)){
+                            return Container(
+                              width: 287.w,
+                              height: 40.h,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.10),
+                                    offset: Offset(0, 4),
+                                    blurRadius: 6,
+                                  ),
+                                ],
+                              ),
+                              child: TextButton(
+                                onPressed: () {
+                                  mapController.validateUserLocation();
+                                  if (mapController.isInSelectedArea == true) {
+                                    Navigator.pushNamed(context, '/webview');
+                                  } else {
+                                    buildAwesomeDialogNotInArea(context).show();
+                                  }
+                                },
+                                style: TextButton.styleFrom(
+                                  backgroundColor: HexColor('#F0FF40'),
+                                ),
+                                child: Text(
+                                  "Lakukan Presensi",
+                                  style: WhiteOnButton,
+                                ),
+                              ),
+                            );
+                          }
+                          else if (currentTime.isAfter(presenceOutStart) &&
                               currentTime.isBefore(presenceOutEnd)) {
                             return Container(
                               width: 287.w,
@@ -338,16 +400,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              // SizedBox(
-              //   height: 13.h,
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.only(left: 7.w),
-              //   child: Text(
-              //     "Jl. Kliningan No.6, Turangga, Kecamatan Lengkong, Kota Bandung, Jawa Barat",
-              //     style: addressHome,
-              //   ),
-              // ),
               SizedBox(
                 height: 20.h,
               ),
