@@ -61,12 +61,7 @@ class _BotNavBarState extends State<BotNavBar> {
           height: 35.h,
         ),
         onPressed: () {
-          // Navigator.pushNamed(context, '/webview');
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => WebViewScreen(nis: id, password: password,),
-              ));
+          Navigator.pushNamed(context, '/webview');
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

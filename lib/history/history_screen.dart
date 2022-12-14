@@ -190,7 +190,7 @@ class _HistoryScreenState extends State<HistoryScreen>
 
                             presence['key'] = snapshot.key;
                             validPresence['key'] = snapshot.key;
-                            return itemListIsNotPresent(
+                            return itemListIsPresent(
                                 presence: validPresence);
                           }),
                     ],
@@ -354,8 +354,8 @@ class _HistoryScreenState extends State<HistoryScreen>
     String timeOut = presence["time_out"] != null
         ? presence["time_out"].split(" ").last
         : "-";
-    String? fullDate = presence["time_in"];
-    DateTime fullDateTime = DateTime.parse(fullDate!);
+    String fullDate = presence["time_in"];
+    DateTime fullDateTime = DateTime.parse(fullDate);
     String dateNow = DateFormat('d MMM yy').format(fullDateTime);
     if (timeIn == "0") timeIn = "-";
     if (timeOut == "0") timeOut = "-";

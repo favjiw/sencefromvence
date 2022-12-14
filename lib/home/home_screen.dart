@@ -112,10 +112,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<String> getName() async {
-    DatabaseReference refName2 = FirebaseDatabase.instance.ref('users').child('-NH2Qg94bIZbqyLZMveS').child('name');
+    var nis = await asyncNIS();
+    final refName2   = FirebaseDatabase.instance.ref('users').orderByChild("id").equalTo(nis);
     DatabaseEvent event = await refName2.once();
-    String name = event.snapshot.value.toString();
-    return name;
+    var value = event.snapshot.value as Map;
+    if(value.containsKey('-NH2Qg94bIZbqyLZMveS')) {
+      var users = value!['-NH2Qg94bIZbqyLZMveS'];
+      // print(users!['name']);
+      // String name = event.snapshot.value.toString();
+      return users!['name'];
+    } else {
+      return '';
+    }
   }
 
   @override
@@ -158,7 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: HomeTitle,
                         ),
                         Text(
-                          name,
+                          nis,
                           style: HomeTitle,
                         ),
                       ],

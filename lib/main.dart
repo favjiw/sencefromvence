@@ -50,7 +50,7 @@ class _SenceAppState extends State<SenceApp> {
               '/permission': (context) => PermissionScreen(),
               '/profile': (context) => ProfileScreen(),
               '/maps': (context) => MapsScreen(),
-              // '/webview': (context) => WebViewScreen(),
+              '/webview': (context) => WebViewScreen(),
             },
           );
         }
