@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:sence_sence/shared/theme.dart';
 import 'package:maps_toolkit/maps_toolkit.dart' as mp_tool;
 
 class MapsScreen extends StatefulWidget {
@@ -32,27 +31,27 @@ class _MapsScreenState extends State<MapsScreen> {
 
   //polygon
   List<LatLng> polygonPoints = [
-    LatLng(-6.941823, 107.628492),
-    LatLng(-6.941839, 107.628906),
-    LatLng(-6.941642, 107.628949),
-    LatLng(-6.941701, 107.629298),
-    LatLng(-6.941551, 107.629362),
-    LatLng(-6.941573, 107.629555),
-    LatLng(-6.941040, 107.629743),
-    LatLng(-6.940652, 107.628932),
-    LatLng(-6.940955, 107.628884),
-    LatLng(-6.940923, 107.628643),
+    const LatLng(-6.941823, 107.628492),
+    const LatLng(-6.941839, 107.628906),
+    const LatLng(-6.941642, 107.628949),
+    const LatLng(-6.941701, 107.629298),
+    const LatLng(-6.941551, 107.629362),
+    const LatLng(-6.941573, 107.629555),
+    const LatLng(-6.941040, 107.629743),
+    const LatLng(-6.940652, 107.628932),
+    const LatLng(-6.940955, 107.628884),
+    const LatLng(-6.940923, 107.628643),
   ];
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   // on below line we have specified camera position
-  static final CameraPosition _kGoogle = const CameraPosition(
+  static const CameraPosition _kGoogle = CameraPosition(
     target: LatLng(-6.941165, 107.628982),
     zoom: 17,
   );
 
   // on below line we have created the list of markers
   final List<Marker> _markers = <Marker>[
-    Marker(
+    const Marker(
         markerId: MarkerId('1'),
         position: LatLng(-6.941165, 107.628982),
         infoWindow: InfoWindow(
@@ -66,7 +65,7 @@ class _MapsScreenState extends State<MapsScreen> {
         .then((value) {})
         .onError((error, stackTrace) async {
       await Geolocator.requestPermission();
-      print("ERROR" + error.toString());
+      print("ERROR$error");
     });
     return await Geolocator.getCurrentPosition();
   }
@@ -83,7 +82,7 @@ class _MapsScreenState extends State<MapsScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black,),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.black,),
         ),
       ),
       body: Container(
@@ -107,7 +106,7 @@ class _MapsScreenState extends State<MapsScreen> {
             //polygon area
             polygons: {
               Polygon(
-                polygonId: PolygonId("1"),
+                polygonId: const PolygonId("1"),
                 points: polygonPoints,
                 fillColor: btnMain.withOpacity(0.20),
                 strokeWidth: 1,
@@ -121,7 +120,7 @@ class _MapsScreenState extends State<MapsScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           getUserCurrentLocation().then((value) async {
-            print(value.latitude.toString() + " " + value.longitude.toString());
+            print("${value.latitude} ${value.longitude}");
             print("");
             print("ini berhasil terjalankan");
             print("");
@@ -130,16 +129,16 @@ class _MapsScreenState extends State<MapsScreen> {
             // marker added for current users location
             _markers.add(
               Marker(
-                markerId: MarkerId("2"),
+                markerId: const MarkerId("2"),
                 position: LatLng(value.latitude, value.longitude),
-                infoWindow: InfoWindow(
+                infoWindow: const InfoWindow(
                   title: 'Lokasi Saya',
                 ),
               ),
             );
 
             // specified current users location
-            CameraPosition cameraPosition = new CameraPosition(
+            CameraPosition cameraPosition = CameraPosition(
               target: LatLng(value.latitude, value.longitude),
               zoom: 18.5,
             );
@@ -161,7 +160,7 @@ class _MapsScreenState extends State<MapsScreen> {
             print("");
           }
         },
-        child: Icon(Icons.location_history_rounded),
+        child: const Icon(Icons.location_history_rounded),
       ),
     );
   }

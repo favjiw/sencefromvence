@@ -18,12 +18,25 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late DatabaseReference dbRef;
   int nis = 0;
+  Map users = {};
 
   @override
   void initState() {
     super.initState();
     dbRef = FirebaseDatabase.instance.ref().child('user');
     // String name = dbRef.equalTo(nis);
+    setUsers();
+  }
+
+  Future<void> setUsers() async {
+    var nis = await asyncNIS();
+    final refName2 = FirebaseDatabase.instance.ref('users').orderByChild("id").equalTo(nis);
+    DatabaseEvent event = await refName2.once();
+    var value = event.snapshot.value as Map;
+    var users = value.values;
+    setState(() {
+      this.users = users.first;
+    });
   }
 
   Future<int> asyncNIS() async {
@@ -79,11 +92,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         width: 9.w,
                       ),
                       Container(
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         width: 60.w,
                         height: 60.h,
-                        decoration: BoxDecoration(
-                            color: HexColor('#00DE19'), shape: BoxShape.circle),
+                        decoration: BoxDecoration(color: HexColor('#00DE19'), shape: BoxShape.circle),
                         child: Container(
                           width: 35.w,
                           height: 35.h,
@@ -92,12 +104,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             borderRadius: BorderRadius.circular(100.r),
                           ),
                           child: Center(
-                              child: Image.asset(
-                                'asset/images/img-profile.png',
-                                width: 40.w,
-                                height: 40.h,
-                                fit: BoxFit.cover,
-                              ),
+                            child: Image.asset(
+                              'asset/images/img-profile.png',
+                              width: 40.w,
+                              height: 40.h,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),
@@ -109,14 +121,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Fairuztsani Kemal Setiawan",
+                            // "Fairuztsani Kemal Setiawan",
+                            users['name'] ?? '',
                             style: settingName,
                           ),
                           SizedBox(
                             height: 5.h,
                           ),
                           Text(
-                            "202118620",
+                            // "202118620",
+                            users['id'].toString(),
                             style: HomeTitle,
                           )
                         ],
@@ -378,14 +392,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         showCloseIcon: false,
         btnOkText: 'Logout',
         btnOkOnPress: () async {
-          final SharedPreferences sharedPreferences =
-              await SharedPreferences.getInstance();
+          final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
           sharedPreferences.remove('nis');
           // Navigator.pushNamed(context, '/login');
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => LoginScreen(),
+              builder: (BuildContext context) => const LoginScreen(),
             ),
           );
         },

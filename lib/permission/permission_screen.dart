@@ -1,7 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:sence_sence/shared/theme.dart';
@@ -23,7 +22,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
   late DateTime currentTime = DateTime.now().subtract(const Duration(hours: 7));
   late String timeNow = DateFormat('yyyy-MM-dd HH:mm:ss').format(currentTime);
   late String yearNow = DateFormat('yyyy-MM-dd').format(currentTime);
-  late String timeReset = yearNow + " 00:00:00";
+  late String timeReset = "$yearNow 00:00:00";
   int nis = 0;
 
 
@@ -43,12 +42,12 @@ class _PermissionScreenState extends State<PermissionScreen> {
   Widget build(BuildContext context) {
     asyncNIS().then((value) {
       setState(() {
-        this.nis = value;
+        nis = value;
       });
     });
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         backgroundColor: neutral,

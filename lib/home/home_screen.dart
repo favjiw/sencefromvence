@@ -1,7 +1,5 @@
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
@@ -31,33 +29,38 @@ class _HomeScreenState extends State<HomeScreen> {
   late DateTime currentTime = DateTime.now();
   late String yearNow = DateFormat('yyyy-MM-dd').format(DateTime.now());
   late String timeNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(currentTime);
-  late String presenceMorningStart = yearNow + " 06:00:00";
-  late String presenceMorningEnd = yearNow + " 07:00:00";
-  late String presenceAfternoonStart = yearNow + " 14:00:00";
-  late String presenceAfternoonEnd = yearNow + " 17:00:00";
-  late String morningStart = yearNow + " 00:00:00";
-  late String morningEnd = yearNow + " 12:00:00";
+  late String presenceMorningStart = "$yearNow 06:00:00";
+  late String presenceMorningEnd = "$yearNow 07:00:00";
+  late String presenceAfternoonStart = "$yearNow 14:00:00";
+  late String presenceAfternoonEnd = "$yearNow 17:00:00";
+  late String morningStart = "$yearNow 00:00:00";
+  late String morningEnd = "$yearNow 12:00:00";
   late DateTime presenceInStart = DateTime.parse(presenceMorningStart);
   late DateTime presenceInEnd = DateTime.parse(presenceMorningEnd);
   late DateTime presenceOutStart = DateTime.parse(presenceAfternoonStart);
   late DateTime presenceOutEnd = DateTime.parse(presenceAfternoonEnd);
   late DateTime dayStart = DateTime.parse(morningStart);
   late DateTime dayEnd = DateTime.parse(morningEnd);
-  String nis = "";
+  // String nis = "";
   Timer? timer;
-  String name = "siapa";
+  // String name = "siapa";
+  Map users = {};
+  bool isAbsent = false;
 
-  MapController mapController = new MapController();
+  MapController mapController = MapController();
   late DatabaseReference dbRef;
 
   @override
   void initState() {
     super.initState();
     dbRef = FirebaseDatabase.instance.ref().child('presence');
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       currentTime = DateTime.now();
       timeNow = DateFormat('yyyy-MM-dd hh:mm:ss').format(currentTime);
     });
+
+    setUsers();
+    // hasPresence(nis);
   }
 
   @override
@@ -66,22 +69,52 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<bool> hasPresence(String Id) async {
+  Future<void> setUsers() async {
+    var nis = await asyncNIS();
+    final refName2 = FirebaseDatabase.instance.ref('users').orderByChild("id").equalTo(nis);
+    DatabaseEvent event = await refName2.once();
+    var value = event.snapshot.value as Map;
+    var users = value.values;
     bool has = false;
-    final snapshot =
-        await FirebaseDatabase.instance.ref().child("presence").get();
+    final snapshot = await FirebaseDatabase.instance.ref().child("presence").get();
     (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
-      if (val["student_id"] == nis) {
+      if (val["student_id"] == users.first["id"]) {
         has = true;
       }
     });
-
-    return has;
+    setState(() {
+      this.users = users.first;
+      isAbsent = has;
+    });
+    print(isAbsent);
   }
 
+  // Future<void> hasPresence(String id) async {
+  //   bool has = false;
+  //   final snapshot = await FirebaseDatabase.instance.ref().child("presence").get();
+  //   (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
+  //     if (val["student_id"] == nis) {
+  //       has = true;
+  //     }
+  //   });
+  //   setState(() {
+  //     isAbsent = has;
+  //   });
+  // }
+  // Future<bool> hasPresence(String id) async {
+  //   bool has = false;
+  //   final snapshot = await FirebaseDatabase.instance.ref().child("presence").get();
+  //   (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
+  //     if (val["student_id"] == nis) {
+  //       has = true;
+  //     }
+  //   });
+  //   print(has);
+  //   return has;
+  // }
+
   bool isCanPresentIn() {
-    if (currentTime.isAfter(presenceInStart) &&
-        currentTime.isBefore(presenceInEnd)) {
+    if (currentTime.isAfter(presenceInStart) && currentTime.isBefore(presenceInEnd)) {
       setState(() {
         canPresent = true;
       });
@@ -111,35 +144,50 @@ class _HomeScreenState extends State<HomeScreen> {
     return await SessionManager().get("user");
   }
 
-  Future<String> getName() async {
+  Future<void> printName() async {
     var nis = await asyncNIS();
-    final refName2   = FirebaseDatabase.instance.ref('users').orderByChild("id").equalTo(nis);
+    final refName2 = FirebaseDatabase.instance.ref('users').orderByChild("id").equalTo(nis);
     DatabaseEvent event = await refName2.once();
     var value = event.snapshot.value as Map;
-    if(value.containsKey('-NH2Qg94bIZbqyLZMveS')) {
-      var users = value!['-NH2Qg94bIZbqyLZMveS'];
-      // print(users!['name']);
-      // String name = event.snapshot.value.toString();
-      return users!['name'];
-    } else {
-      return '';
-    }
+    print(value);
+    // if (value.containsKey('-NH2Qg94bIZbqyLZMveS')) {
+    //   var users = value['-NH2Qg94bIZbqyLZMveS'];
+    //   // print(users!['name']);
+    //   // String name = event.snapshot.value.toString();
+    //   return users!['name'];
+    // } else {
+    //   return '';
+    // }
   }
+
+  // Future<String> getName() async {
+  //   var nis = await asyncNIS();
+  //   final refName2 = FirebaseDatabase.instance.ref('users').orderByChild("id").equalTo(nis);
+  //   DatabaseEvent event = await refName2.once();
+  //   var value = event.snapshot.value as Map;
+  //   if (value.containsKey('-NH2Qg94bIZbqyLZMveS')) {
+  //     var users = value['-NH2Qg94bIZbqyLZMveS'];
+  //     // print(users!['name']);
+  //     // String name = event.snapshot.value.toString();
+  //     return users!['name'];
+  //   } else {
+  //     return '';
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    // asyncNIS().then((value) {
+    //   setState(() {
+    //     nis = '$value';
+    //   });
+    // });
 
-    asyncNIS().then((value) {
-      setState(() {
-        this.nis = '$value';
-      });
-    });
-
-    getName().then((value){
-      setState(() {
-        this.name = value;
-      });
-    });
+    // getName().then((value) {
+    //   setState(() {
+    //     name = value;
+    //   });
+    // });
 
     return Scaffold(
       backgroundColor: neutral,
@@ -166,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           style: HomeTitle,
                         ),
                         Text(
-                          nis,
+                          users['name'] ?? '',
                           style: HomeTitle,
                         ),
                       ],
@@ -174,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: 41.w,
                       height: 41.h,
-                      padding: EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: HexColor('#00DE19'),
@@ -218,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         spreadRadius: 0,
                       ),
                     ],
-                    image: DecorationImage(
+                    image: const DecorationImage(
                       alignment: Alignment.bottomCenter,
                       fit: BoxFit.contain,
                       image: AssetImage('asset/images/line-home-bg.png'),
@@ -245,7 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Container(
                             width: 35.w,
                             height: 35.h,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                               color: Colors.white,
                             ),
@@ -266,12 +314,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: HomeTimeWhite,
                           ),
                           Container(
-                            child: LayoutBuilder(builder: (context, constraints){
-                              if (currentTime.isAfter(presenceInStart) &&
-                                  currentTime.isBefore(presenceOutStart)){
-                                return Text("(telat)", style: homeLate,);
-                              }else{
-                                return SizedBox();
+                            child: LayoutBuilder(builder: (context, constraints) {
+                              if (currentTime.isAfter(presenceInStart) && currentTime.isBefore(presenceOutStart)) {
+                                return Text(
+                                  "(telat)",
+                                  style: homeLate,
+                                );
+                              } else {
+                                return const SizedBox();
                               }
                             }),
                           )
@@ -282,8 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       Container(
                         child: LayoutBuilder(builder: (context, constraints) {
-                          if (currentTime.isAfter(presenceInStart) &&
-                              currentTime.isBefore(presenceInEnd)) {
+                          if (currentTime.isAfter(presenceInStart) && currentTime.isBefore(presenceInEnd)) {
                             return Container(
                               width: 287.w,
                               height: 40.h,
@@ -292,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.10),
-                                    offset: Offset(0, 4),
+                                    offset: const Offset(0, 4),
                                     blurRadius: 6,
                                   ),
                                 ],
@@ -315,7 +364,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             );
-                          } else if (currentTime.isAfter(presenceInEnd) && currentTime.isBefore(presenceOutStart)){
+                          } else if (currentTime.isAfter(presenceInEnd) && currentTime.isBefore(presenceOutStart)) {
                             return Container(
                               width: 287.w,
                               height: 40.h,
@@ -324,7 +373,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.10),
-                                    offset: Offset(0, 4),
+                                    offset: const Offset(0, 4),
                                     blurRadius: 6,
                                   ),
                                 ],
@@ -347,9 +396,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             );
-                          }
-                          else if (currentTime.isAfter(presenceOutStart) &&
-                              currentTime.isBefore(presenceOutEnd)) {
+                          } else if (currentTime.isAfter(presenceOutStart) && currentTime.isBefore(presenceOutEnd)) {
                             return Container(
                               width: 287.w,
                               height: 40.h,
@@ -358,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 boxShadow: [
                                   BoxShadow(
                                     color: Colors.black.withOpacity(0.10),
-                                    offset: Offset(0, 4),
+                                    offset: const Offset(0, 4),
                                     blurRadius: 6,
                                   ),
                                 ],
@@ -437,17 +484,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  color: HexColor('#C9C9C9').withOpacity(0.10),
-                                  offset: const Offset(0, 4),
-                                  blurRadius: 6),
+                                  color: HexColor('#C9C9C9').withOpacity(0.10), offset: const Offset(0, 4), blurRadius: 6),
                             ]),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset("asset/images/history-ic.png", width: 39.w, height: 39.h,),
+                            Image.asset(
+                              "asset/images/history-ic.png",
+                              width: 39.w,
+                              height: 39.h,
+                            ),
                             SizedBox(height: 5.h),
-                            Text("Riwayat", style: homeCategoryTitle,),
+                            Text(
+                              "Riwayat",
+                              style: homeCategoryTitle,
+                            ),
                           ],
                         ),
                       ),
@@ -473,17 +525,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  color: HexColor('#C9C9C9').withOpacity(0.10),
-                                  offset: const Offset(0, 4),
-                                  blurRadius: 6),
+                                  color: HexColor('#C9C9C9').withOpacity(0.10), offset: const Offset(0, 4), blurRadius: 6),
                             ]),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset("asset/images/sick-ic.png", width: 39.w, height: 39.h,),
+                            Image.asset(
+                              "asset/images/sick-ic.png",
+                              width: 39.w,
+                              height: 39.h,
+                            ),
                             SizedBox(height: 5.h),
-                            Text("Ajukan Izin", style: homeCategoryTitle,),
+                            Text(
+                              "Ajukan Izin",
+                              style: homeCategoryTitle,
+                            ),
                           ],
                         ),
                       ),
@@ -509,17 +566,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             boxShadow: [
                               BoxShadow(
-                                  color: HexColor('#C9C9C9').withOpacity(0.10),
-                                  offset: const Offset(0, 4),
-                                  blurRadius: 6),
+                                  color: HexColor('#C9C9C9').withOpacity(0.10), offset: const Offset(0, 4), blurRadius: 6),
                             ]),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.asset("asset/images/map-ic.png", width: 39.w, height: 39.h,),
+                            Image.asset(
+                              "asset/images/map-ic.png",
+                              width: 39.w,
+                              height: 39.h,
+                            ),
                             SizedBox(height: 5.h),
-                            Text("Lokasi", style: homeCategoryTitle,),
+                            Text(
+                              "Lokasi",
+                              style: homeCategoryTitle,
+                            ),
                           ],
                         ),
                       ),
@@ -539,7 +601,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: btnItemPageHome,
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       Navigator.pushNamed(context, '/history');
                     },
                     child: Text(
@@ -552,19 +614,18 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 10.h,
               ),
-              hasPresence(nis) != false
+              // hasPresence(users['id'].toString()) == Future.value(false)
+              isAbsent
                   ? FirebaseAnimatedList(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       query: dbPresence.limitToLast(5),
-                      itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                          Animation<double> animation, int index) {
+                      itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
                         Map presence = snapshot.value as Map;
                         Map validPresence = {};
 
                         presence.forEach((key, val) {
-                          if (key == "student_id" &&
-                              "${presence[key]}" == nis) {
+                          if (key == "student_id" && "${presence[key]}" == users['id'].toString()) {
                             validPresence = presence;
                           }
                         });
@@ -615,12 +676,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget itemList({required presence}) {
-    String presenceIn = presence["time_in"] == null
-        ? "0000-00-00 00:00:00"
-        : presence["time_in"];
-    String presenceOut = presence["time_out"] == null
-        ? "0000-00-00 00:00:00"
-        : presence["time_out"];
+    String presenceIn = presence["time_in"] ?? "0000-00-00 00:00:00";
+    String presenceOut = presence["time_out"] ?? "0000-00-00 00:00:00";
     String timeIn = "empty";
     String timeOut = "empty";
 
@@ -653,7 +710,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (timeOut == "0") timeOut = "-";
 
     return timeIn == "-" && timeOut == "-"
-        ? SizedBox()
+        ? const SizedBox()
         : Column(
             children: [
               Container(
@@ -668,10 +725,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 1.w,
                     ),
                     boxShadow: [
-                      BoxShadow(
-                          color: HexColor('#C9C9C9').withOpacity(0.10),
-                          offset: const Offset(0, 4),
-                          blurRadius: 6),
+                      BoxShadow(color: HexColor('#C9C9C9').withOpacity(0.10), offset: const Offset(0, 4), blurRadius: 6),
                     ]),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -695,8 +749,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 4.h,
                               ),
                               Container(
-                                child: LayoutBuilder(
-                                    builder: (context, constraints) {
+                                child: LayoutBuilder(builder: (context, constraints) {
                                   if (presence["status"] == 0) {
                                     return Row(
                                       children: [
@@ -764,8 +817,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 4.h,
                               ),
                               Container(
-                                child: LayoutBuilder(
-                                    builder: (context, constraints) {
+                                child: LayoutBuilder(builder: (context, constraints) {
                                   if (presence["status"] == 0) {
                                     return Row(
                                       children: [

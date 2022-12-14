@@ -7,7 +7,6 @@ import 'package:hexcolor/hexcolor.dart';
 import 'package:intl/intl.dart';
 import 'package:sence_sence/shared/theme.dart';
 import 'package:sence_sence/widget/appbar.dart';
-import 'package:lottie/lottie.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({Key? key}) : super(key: key);
@@ -16,8 +15,7 @@ class HistoryScreen extends StatefulWidget {
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen>
-    with SingleTickerProviderStateMixin {
+class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProviderStateMixin {
   Query dbPresence = FirebaseDatabase.instance.ref().child('presence');
   late TabController tabController;
   String nis = "";
@@ -26,34 +24,26 @@ class _HistoryScreenState extends State<HistoryScreen>
     return await SessionManager().get("user");
   }
 
-  Future<bool> hasPresence(String Id) async {
-    bool has = false;
-    final snapshot =
-        await FirebaseDatabase.instance.ref().child("presence").get();
-    (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
-      if (val["student_id"] == nis) {
-        has = true;
-      }
-    });
-
-    return has;
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
-    tabController = TabController(length: 2, vsync: this);
     super.initState();
+    tabController = TabController(length: 2, vsync: this);
+    setUsers();
+  }
+
+  Future<void> setUsers() async {
+    var nis = await asyncNIS();
+    final refName2 = FirebaseDatabase.instance.ref('users').orderByChild("id").equalTo(nis);
+    DatabaseEvent event = await refName2.once();
+    var value = event.snapshot.value as Map;
+    var users = value.values;
+    setState(() {
+      this.nis = users.first["id"].toString();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    asyncNIS().then((value) {
-      setState(() {
-        this.nis = '$value';
-      });
-    });
-
     return Scaffold(
       backgroundColor: neutral,
       body: Column(
@@ -127,7 +117,7 @@ class _HistoryScreenState extends State<HistoryScreen>
             unselectedLabelColor: grayUnselect,
             unselectedLabelStyle: historyUnSelectedLabel,
             labelStyle: historySelectedLabel,
-            tabs: [Text("Hadir"), Text("Absen")],
+            tabs: const [Text("Hadir"), Text("Absen")],
           ),
           Expanded(
             child: TabBarView(
@@ -139,18 +129,15 @@ class _HistoryScreenState extends State<HistoryScreen>
                       SizedBox(height: 20.h),
                       FirebaseAnimatedList(
                           shrinkWrap: true,
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           query: dbPresence,
-                          itemBuilder: (BuildContext context,
-                              DataSnapshot snapshot,
-                              Animation<double> animation,
-                              int index) {
+                          itemBuilder:
+                              (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
                             Map presence = snapshot.value as Map;
                             Map validPresence = {};
 
                             presence.forEach((key, val) {
-                              if (key == "student_id" &&
-                                  "${presence[key]}" == nis) {
+                              if (key == "student_id" && "${presence[key]}" == nis) {
                                 validPresence = presence;
                               }
                             });
@@ -172,26 +159,22 @@ class _HistoryScreenState extends State<HistoryScreen>
                       SizedBox(height: 20.h),
                       FirebaseAnimatedList(
                           shrinkWrap: true,
-                          physics: ScrollPhysics(),
+                          physics: const ScrollPhysics(),
                           query: dbPresence,
-                          itemBuilder: (BuildContext context,
-                              DataSnapshot snapshot,
-                              Animation<double> animation,
-                              int index) {
+                          itemBuilder:
+                              (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
                             Map presence = snapshot.value as Map;
                             Map validPresence = {};
 
                             presence.forEach((key, val) {
-                              if (key == "student_id" &&
-                                  "${presence[key]}" == nis) {
+                              if (key == "student_id" && "${presence[key]}" == nis) {
                                 validPresence = presence;
                               }
                             });
 
                             presence['key'] = snapshot.key;
                             validPresence['key'] = snapshot.key;
-                            return itemListIsPresent(
-                                presence: validPresence);
+                            return itemListIsPresent(presence: validPresence);
                           }),
                     ],
                   ),
@@ -205,13 +188,10 @@ class _HistoryScreenState extends State<HistoryScreen>
   }
 
   Widget itemListIsPresent({required presence}) {
+    print(presence);
     // int statusFromPresence = presence["status"];
-    String presenceIn = presence["time_in"] == null
-        ? "0000-00-00 00:00:00"
-        : presence["time_in"];
-    String presenceOut = presence["time_Out"] == null
-        ? "0000-00-00 00:00:00"
-        : presence["time_Out"];
+    String presenceIn = presence["time_in"] ?? "0000-00-00 00:00:00";
+    String presenceOut = presence["time_Out"] ?? "0000-00-00 00:00:00";
     String timeIn = "empty";
     String timeOut = "empty";
 
@@ -257,103 +237,95 @@ class _HistoryScreenState extends State<HistoryScreen>
     }
 
     return Column(
-              children: [
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
-                  width: 329.w,
-                  height: 74.h,
-                  decoration: BoxDecoration(
-                      color: white,
-                      borderRadius: BorderRadius.circular(6.r),
-                      border: Border.all(
-                        color: grayBorder,
-                        width: 1.w,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                            color: HexColor('#C9C9C9').withOpacity(0.10),
-                            offset: const Offset(0, 4),
-                            blurRadius: 6),
-                      ]),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 190.w,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Masuk",
-                                  style: activityLabel,
-                                ),
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                                Text(
-                                  timeIn,
-                                  style: activityTime,
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              width: 30.w,
-                            ),
-                            Container(
-                              width: 1.w,
-                              height: 30.h,
-                              color: grayUnselect,
-                            ),
-                            SizedBox(
-                              width: 30.w,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Keluar",
-                                  style: activityLabel,
-                                ),
-                                SizedBox(
-                                  height: 4.h,
-                                ),
-                                Text(
-                                  timeOut,
-                                  style: activityTime,
-                                ),
-                              ],
-                            ),
-                          ],
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 11.h, horizontal: 15.w),
+          width: 329.w,
+          height: 74.h,
+          decoration: BoxDecoration(
+              color: white,
+              borderRadius: BorderRadius.circular(6.r),
+              border: Border.all(
+                color: grayBorder,
+                width: 1.w,
+              ),
+              boxShadow: [
+                BoxShadow(color: HexColor('#C9C9C9').withOpacity(0.10), offset: const Offset(0, 4), blurRadius: 6),
+              ]),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 190.w,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Masuk",
+                          style: activityLabel,
                         ),
-                      ),
-                      Text(
-                        dateNow,
-                        style: activityDateGray,
-                      ),
-                    ],
-                  ),
+                        SizedBox(
+                          height: 4.h,
+                        ),
+                        Text(
+                          timeIn,
+                          style: activityTime,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      width: 30.w,
+                    ),
+                    Container(
+                      width: 1.w,
+                      height: 30.h,
+                      color: grayUnselect,
+                    ),
+                    SizedBox(
+                      width: 30.w,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Keluar",
+                          style: activityLabel,
+                        ),
+                        SizedBox(
+                          height: 4.h,
+                        ),
+                        Text(
+                          timeOut,
+                          style: activityTime,
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 10.h,
-                ),
-              ],
-            );
-
+              ),
+              Text(
+                dateNow,
+                style: activityDateGray,
+              ),
+            ],
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+      ],
+    );
   }
 
   Widget itemListIsNotPresent({required presence}) {
     // int statusFromPresence = presence["status"];
-    String timeIn =
-        presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
-    String timeOut = presence["time_out"] != null
-        ? presence["time_out"].split(" ").last
-        : "-";
+    String timeIn = presence["time_in"] != null ? presence["time_in"].split(" ").last : "-";
+    String timeOut = presence["time_out"] != null ? presence["time_out"].split(" ").last : "-";
     String fullDate = presence["time_in"];
     DateTime fullDateTime = DateTime.parse(fullDate);
     String dateNow = DateFormat('d MMM yy').format(fullDateTime);
@@ -378,10 +350,7 @@ class _HistoryScreenState extends State<HistoryScreen>
                 width: 1.w,
               ),
               boxShadow: [
-                BoxShadow(
-                    color: HexColor('#C9C9C9').withOpacity(0.10),
-                    offset: const Offset(0, 4),
-                    blurRadius: 6),
+                BoxShadow(color: HexColor('#C9C9C9').withOpacity(0.10), offset: const Offset(0, 4), blurRadius: 6),
               ]),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -5,7 +5,6 @@ import 'package:sence_sence/home/controller/maps_controller.dart';
 import 'package:sence_sence/home/home_screen.dart';
 import 'package:sence_sence/profile/profile_screen.dart';
 import 'package:sence_sence/shared/theme.dart';
-import 'package:sence_sence/webview/webview_screen.dart';
 
 class BotNavBar extends StatefulWidget {
   const BotNavBar({Key? key}) : super(key: key);
@@ -17,11 +16,11 @@ class BotNavBar extends StatefulWidget {
 
 class _BotNavBarState extends State<BotNavBar> {
   int currentIndex = 0;
-  MapController mapController = new MapController();
+  MapController mapController = MapController();
 
 
   final PageStorageBucket bucket = PageStorageBucket();
-  Widget currentScreen = HomeScreen();
+  Widget currentScreen = const HomeScreen();
 
   late int id;
   late String password;
@@ -40,13 +39,13 @@ class _BotNavBarState extends State<BotNavBar> {
   Widget build(BuildContext context) {
     fetchId().then((res) {
       setState(() {
-        this.id = res;
+        id = res;
       });
     });
 
     fetchPassword().then((res) {
       setState(() {
-        this.password = res;
+        password = res;
       });
     });
     return Scaffold(
@@ -66,7 +65,7 @@ class _BotNavBarState extends State<BotNavBar> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
-        shape: CircularNotchedRectangle(),
+        shape: const CircularNotchedRectangle(),
         notchMargin: 10,
         child: SizedBox(
           height: 56.h,
@@ -81,7 +80,7 @@ class _BotNavBarState extends State<BotNavBar> {
                   child: MaterialButton(
                     onPressed: (){
                       setState(() {
-                        currentScreen = HomeScreen();
+                        currentScreen = const HomeScreen();
                         currentIndex = 0;
                       });
                     },
@@ -109,7 +108,7 @@ class _BotNavBarState extends State<BotNavBar> {
                   child: MaterialButton(
                     onPressed: (){
                       setState(() {
-                        currentScreen = ProfileScreen();
+                        currentScreen = const ProfileScreen();
                         currentIndex = 1;
                       });
                     },

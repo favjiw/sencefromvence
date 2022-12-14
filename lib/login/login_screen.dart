@@ -7,10 +7,8 @@ import 'package:sence_sence/shared/theme.dart';
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:flutter_session_manager/flutter_session_manager.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:sence_sence/widget/botnavbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 String _hash(String text) {
   var bytes = utf8.encode(text);
@@ -41,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        FocusScope.of(context).requestFocus(new FocusNode());
+        FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
         backgroundColor: neutral,
@@ -113,13 +111,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(5.r),
                           borderSide: BorderSide(width: 1, color: grayBorder),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 14.h, horizontal: 12.w),
+                        contentPadding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 12.w),
                         hintText: '1234567890',
                         hintStyle: passHint,
                         suffixIcon: IconButton(
                           onPressed: () {},
-                          icon: Icon(Icons.person),
+                          icon: const Icon(Icons.person),
                         ),
                       ),
                     ),
@@ -143,8 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(5.r),
                           borderSide: BorderSide(width: 1, color: grayUnselect),
                         ),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: 14.h, horizontal: 13.w),
+                        contentPadding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 13.w),
                         hintText: 'Password',
                         hintStyle: passHint,
                         suffixIcon: IconButton(
@@ -154,9 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                           },
                           icon: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility_off
-                                : Icons.visibility,
+                            _isPasswordVisible ? Icons.visibility_off : Icons.visibility,
                           ),
                         ),
                       ),
@@ -194,29 +188,34 @@ class _LoginScreenState extends State<LoginScreen> {
                             final snapshot = await FirebaseDatabase.instance.ref().child("users").get();
 
                             if (snapshot.exists) {
-                              (snapshot.value as Map<dynamic, dynamic>)
-                                  .forEach((key, val) {
-                                    if("${val["id"]}" == nis && "${val["password"]}" == _hash(password)) {
-                                      print("Found!");
-                                      valid = true;
-                                    }
+                              (snapshot.value as Map<dynamic, dynamic>).forEach((key, val) {
+                                if ("${val["id"]}" == nis && "${val["password"]}" == _hash(password)) {
+                                  print("Found!");
+                                  valid = true;
+                                }
                               });
                             }
-                            if(valid) {
-                              print("Session exist : ${
-                                  await SessionManager().containsKey("id") == true ? "true": "false"
-                              }");
+                            if (valid) {
+                              print(
+                                  "Session exist : ${await SessionManager().containsKey("id") == true ? "true" : "false"}");
                               await SessionManager().set("user", nis);
                               await SessionManager().set("pass", _hash(password));
 
-                              Navigator.pushNamedAndRemoveUntil( context, '/nav-bar', (route) => false);
+                              // Navigator.pushNamedAndRemoveUntil(context, '/nav-bar', (route) => false);
                               Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const BotNavBar(),
                                   ));
-                            }else {
+                            } else {
                               print("Username/password salah");
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  backgroundColor: Colors.red,
+                                  duration: Duration(milliseconds: 2000),
+                                  content: Text('NIS atau password salah!!'),
+                                ),
+                              );
                             }
                           },
                           style: ButtonStyle(
