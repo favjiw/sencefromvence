@@ -33,12 +33,15 @@ Follow these steps to set up the project locally:
    
 2. Navigate to the project directory:
 
+    ```bash
     cd sence
     
 4. Install the necessary dependencies:
 
+    ```bash
    flutter pub get
   
 6. Run the app:
 
+    ```bash
    flutter run
